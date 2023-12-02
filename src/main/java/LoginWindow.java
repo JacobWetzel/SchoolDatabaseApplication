@@ -21,8 +21,8 @@ public class LoginWindow extends JFrame implements ActionListener{
         studentPanel.setLayout(new BorderLayout());
         studentPanel.setBorder(new EmptyBorder(10,10,10,10));
 
-        JLabel studentlbl = new JLabel("Student:");
-        studentlbl.setFont(new Font("Serif", Font.PLAIN, 20));
+        JLabel studentLabel = new JLabel("Student:");
+        studentLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 
         JButton addStudentBtn = new JButton("Add Student"); // add student Button
         JButton delStudentBtn = new JButton("Delete Student");  // del student button
@@ -32,7 +32,7 @@ public class LoginWindow extends JFrame implements ActionListener{
         delStudentBtn.addActionListener(this);
         modStudentBtn.addActionListener(this);
 
-        studentPanel.add(studentlbl, BorderLayout.NORTH);
+        studentPanel.add(studentLabel, BorderLayout.NORTH);
         studentPanel.add(addStudentBtn, BorderLayout.LINE_START);
         studentPanel.add(delStudentBtn, BorderLayout.CENTER);
         studentPanel.add(modStudentBtn, BorderLayout.LINE_END);
