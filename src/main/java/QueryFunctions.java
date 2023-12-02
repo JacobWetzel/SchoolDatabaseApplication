@@ -1,4 +1,4 @@
-import java.sql.Connection;
+/*import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -48,7 +48,7 @@ public class QueryFunctions {
         try (Connection connection = DatabaseConnection.getConnection()){
             String sql = "UPDATE RequiredClass SET ClassID = newClassID, MajorID = newMajorID WHERE ClassID = oldClassID";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
-                preparedStatement.setString(1,RequiredClass);
+                preparedStatement.setString(1, RequiredClass);
                 preparedStatement.setString(2, newClassID);
                 preparedStatement.setString(3, MajorID);
                 preparedStatement.setString(4, oldClassID);
@@ -148,3 +148,4 @@ public class QueryFunctions {
     // CHECK TO SEE IF A STUDENT IS ELIGIBLE FOR A CLASS
 
 }
+*/
