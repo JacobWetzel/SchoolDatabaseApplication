@@ -6,16 +6,48 @@ import java.sql.*;
 
 public class LoginWindow extends JFrame implements ActionListener{
 
+    JTextField usernameField;
+    JPasswordField passField;
+
+
     public LoginWindow(String frameTitle) {
         super(frameTitle);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(500, 200);
 
 
         JPanel mainPanel = new JPanel();                // create main panel
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));    // give it a vertical layout
+       // mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));    // give it a vertical layout
 
 
+        /* Create Username enter field */
+
+        mainPanel.add(new JLabel("Username:"));
+        usernameField = new JTextField(10);
+        mainPanel.add(usernameField);
+
+        /* End username enter field */
+
+
+        /* Begin Password enter field */
+
+        mainPanel.add(new JLabel("Password:"));
+        passField = new JPasswordField(15);
+        mainPanel.add(passField);
+
+        /* End Password enter field */
+
+
+        /* create button and button action listener */
+
+        JButton submit = new JButton("Submit");
+        mainPanel.add(submit);
+
+        String username = "";
+        String password = "";
+        submit.addActionListener(this::actionPerformed);
+
+    /*
         ////// BEGINNING OF CREATION FOR STUDENT BUTTONS ////////
         JPanel studentPanel = new JPanel();
         studentPanel.setLayout(new BorderLayout());
@@ -88,7 +120,7 @@ public class LoginWindow extends JFrame implements ActionListener{
         mainPanel.add(majorPanel);
 
         ///////// END OF CREATION FOR MAJOR BUTTONS ///////////
-
+    */
 
 
 
@@ -123,6 +155,21 @@ public class LoginWindow extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e){
+        String username = usernameField.getText();
+        String password = new String(passField.getPassword());
+        QueryFunctions db = new QueryFunctions();
+        if(db.studentCredentialsValidation(username, password)){
+            System.out.println("Student LOGIN SUCCESSFUL");
+        }
+        else{
+            System.out.println("Student LOGIN FAILED");
+        }
+        if(db.facultyCredentialsValidation(username, password)){
+            System.out.println("faculty LOGIN SUCCESSFUL");
+        }
+        else{
+            System.out.println("faculty LOGIN FAILED");
+        }
 
     }
 

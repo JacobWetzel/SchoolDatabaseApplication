@@ -1,14 +1,79 @@
-/*import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.awt.*;
+import java.sql.*;
 
 public class QueryFunctions {
 
+    private static String url;
 
+    public QueryFunctions(){
+        url = "jdbc:sqlite:./src/main/java/Databases/SchoolDB.SQLite";
+    }
+
+    public static boolean studentCredentialsValidation(String username, String password){
+
+        try (Connection conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                System.out.println("Connection made");
+                String findStudent = "SELECT * FROM Students WHERE StudentID = ? AND Password = ?";
+                try (PreparedStatement getStudent = conn.prepareStatement(findStudent)) {
+
+                    getStudent.setString(1, username);
+                    getStudent.setString(2, password);
+                    ResultSet students = getStudent.executeQuery();
+
+                    if(students.next()){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+
+    public static boolean facultyCredentialsValidation(String username, String password){
+
+        try (Connection conn = DriverManager.getConnection(url)) {
+            if (conn != null) {
+                System.out.println("Connection made");
+                String findStudent = "SELECT * FROM Faculty WHERE FacultyID = ? AND Password = ?";
+                try (PreparedStatement getFaculty = conn.prepareStatement(findStudent)) {
+
+                    getFaculty.setString(1, username);
+                    getFaculty.setString(2, password);
+                    ResultSet faculty = getFaculty.executeQuery();
+
+                    if(faculty.next()){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+
+/*
     public static void addStudentUG(int studentID, String fname, String lname, String bday, float gpa, int year, String major, String researchArea, String Type, int ProfessorID,  int isGrad){
-        try (Connection connection = DatabaseConnection.getConnection()){
+        try (Connection conn = DriverManager.getConnection(url)){
             String sql = "INSERT INTO Student(studentID, fName, lName, bday, gpa);";     // add student to Student table
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            try (PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                 preparedStatement.setInt(1, studentID);
                 preparedStatement.setString(2, fname);
                 preparedStatement.setString(3, lname);          // not entirely sure how the prepared Statement works
@@ -146,6 +211,5 @@ public class QueryFunctions {
     // ROLL BACK QUERY
 
     // CHECK TO SEE IF A STUDENT IS ELIGIBLE FOR A CLASS
-
-}
 */
+}
