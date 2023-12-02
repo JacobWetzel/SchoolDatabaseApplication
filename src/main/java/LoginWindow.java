@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+
 public class LoginWindow extends JFrame implements ActionListener{
 
     public LoginWindow(String frameTitle) {
@@ -14,10 +12,20 @@ public class LoginWindow extends JFrame implements ActionListener{
     }
 
     public void createDB(){
-        String url = "jdbc:sqlite:mytest.sqlite";
+        String url = "jdbc:sqlite:./src/main/java/Databases/Faculty.SQLite";
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 System.out.println("Connection made");
+                try (Statement stmt = conn.createStatement()) {
+                    ResultSet testSet = stmt.executeQuery("SELECT * FROM Faculty");
+
+                    while(testSet.next() == true){
+                        System.out.println("ID, fname, lname " + testSet.getInt("FacultyID") + " " + testSet.getString("Fname") + " "+ testSet.getString("Lname"));
+                    }
+
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

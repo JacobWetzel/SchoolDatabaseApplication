@@ -30,7 +30,16 @@ dependencies {
     implementation group: 'org.xerial:sqlite-jdbc:3.44.1.0'
 }
 */
-apply plugin: 'java'
+//apply plugin: 'java'
+
+plugins {
+    id 'application'
+    id 'java'
+}
+
+mainClassName = 'DatabaseLogin'
+
+
 
 // In this section you declare where to find the dependencies of your project
 repositories {
