@@ -10,6 +10,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JPanel addStudent = addStudent();
     JPanel modifyStudent = modifyStudent();
     JPanel editStudent = editStudent();
+    JPanel addClass = addClass();
     public FacultyInterface(){
         setTitle("Faculty Login");
         setSize(600, 300);
@@ -19,7 +20,9 @@ public class FacultyInterface extends JFrame implements ActionListener {
         master.add(addStudent);
         master.add(modifyStudent);
         master.add(editStudent);
+        master.add(addClass);
 
+        addClass.setVisible(false);
         editStudent.setVisible(false);
         addStudent.setVisible(false);
         modifyStudent.setVisible(false);
@@ -42,14 +45,17 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         JButton addStudentBtn = new JButton("Add New Student");
         JButton removeStudentBtn = new JButton("Modify A Student");
+        JButton addClassBtn = new JButton("Add a New Class");
         //JButton editStudentBtn = new JButton("Edit A Student");
 
+        addClassBtn.addActionListener(this);
         removeStudentBtn.addActionListener(this);
         addStudentBtn.addActionListener(this);
         //editStudentBtn.addActionListener(this);
 
         superPanel.add(addStudentBtn);
         superPanel.add(removeStudentBtn);
+        superPanel.add(addClassBtn);
         //superPanel.add(editStudentBtn);
 
         mainPanel.add(superPanel, BorderLayout.CENTER);
@@ -133,7 +139,6 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         return infoScreen;
     }
-
     public JPanel modifyStudent(){
         JPanel infoScreen = new JPanel();
         infoScreen.setLayout(new BorderLayout());
@@ -276,11 +281,67 @@ public class FacultyInterface extends JFrame implements ActionListener {
         infoScreen.add(panel, BorderLayout.CENTER);
         return infoScreen;
     }
+
+
+
+    private JPanel addClass(){
+        JPanel infoScreen = new JPanel(new BorderLayout());
+
+        JLabel title = new JLabel("Adding Class");
+        infoScreen.add(title, BorderLayout.NORTH);
+
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+
+        JPanel classIDPanel = new JPanel(new FlowLayout());
+        JPanel infoPanel = new JPanel(new FlowLayout());    //class num, subject, credits
+
+        JLabel classIDLabel = new JLabel("Class ID: ");
+        JLabel subjectLabel = new JLabel("Subject: ");
+        JLabel classNumLabel = new JLabel("Class Number: ");
+        JLabel creditLabel = new JLabel("Credits: ");
+
+        JTextField classIdText = new JTextField(5);
+        JTextField subjectText = new JTextField(15);
+        JTextField classNumText = new JTextField(5);
+        JTextField creditText = new JTextField(5);
+
+        JButton addClassBtn = new JButton("Add Class");
+        addClassBtn.addActionListener(this);
+
+        classIDPanel.add(classIDLabel);
+        classIDPanel.add(classIdText);
+
+        infoPanel.add(subjectLabel);
+        infoPanel.add(subjectText);
+        infoPanel.add(classNumLabel);
+        infoPanel.add(classNumText);
+        infoPanel.add(creditLabel);
+        infoPanel.add(creditText);
+
+        panel.add(classIDPanel);
+        panel.add(infoPanel);
+        panel.add(addClassBtn);
+
+        infoScreen.add(panel);
+
+        return infoScreen;
+    }
+    //private JPanel modifyClass(){}
+   // private JPanel editClass(){}
+
+
+
     private JPanel getActivePanel(){
         if (mainMenu.isVisible()){return mainMenu;}
         else if (addStudent.isVisible()){return addStudent;}
         else if (modifyStudent.isVisible()){return modifyStudent;}
         else if (editStudent.isVisible()){return editStudent;}
+        else if (addClass.isVisible()){return addClass;}
         else{ return mainMenu;}
     }
     @Override
@@ -288,6 +349,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
         if (actionEvent.getActionCommand().equals("Add New Student")){
             mainMenu.setVisible(false);
             addStudent.setVisible(true);
+            master.updateUI();
+        }
+        if (actionEvent.getActionCommand().equals("Add a New Class")){
+            mainMenu.setVisible(false);
+            addClass.setVisible(true);
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Modify A Student")){
@@ -313,6 +379,9 @@ public class FacultyInterface extends JFrame implements ActionListener {
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Add Student")){
+            // call sql command to add the student to the database
+        }
+        else if (actionEvent.getActionCommand().equals("Add Class")){
             // call sql command to add the student to the database
         }
         else if (actionEvent.getActionCommand().equals("Remove Student")){
