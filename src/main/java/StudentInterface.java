@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 public class StudentInterface extends JFrame implements ActionListener {
     int studentId;
+    RetrieveFunctions retFun = new RetrieveFunctions();
     JPanel master = new JPanel();
     JPanel mainPanel = mainMenu();
     JPanel addClass = addClass();
