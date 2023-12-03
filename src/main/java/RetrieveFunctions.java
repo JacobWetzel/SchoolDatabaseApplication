@@ -50,11 +50,13 @@ public class RetrieveFunctions {
             try (PreparedStatement statement = conn.prepareStatement(sql)){
                 ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
-                    String subject = rs.getString(2);   // retrieves the subject
-                    Integer Num = rs.getInt(3);             // gets the class number
-                    Integer Credits = rs.getInt(4);
 
-                    String classDetails = "Subject: " + subject + "\nCourse Number: " + Num + "\n Credits: " + Integer.toString(Credits);
+                    String courseID = rs.getString(1);
+                    String subject = rs.getString(3);   // retrieves the subject
+                    Integer Num = rs.getInt(4);             // gets the class number
+                    Integer Credits = rs.getInt(5);
+
+                    String classDetails = "CourseID: " + courseID + "\n Subject: " + subject + "\n Course Number: " + Num + "\n Credits: " + Integer.toString(Credits);
                     classList.add(classDetails);
                 }
             } catch (SQLException e) {
