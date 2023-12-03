@@ -11,6 +11,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JPanel modifyStudent;
     JPanel editStudent;
     JPanel addClass;
+    JPanel modifyClass;
+    JPanel editClass;
 
     public FacultyInterface(){
         setTitle("Faculty Login");
@@ -23,17 +25,23 @@ public class FacultyInterface extends JFrame implements ActionListener {
         modifyStudent = modifyStudent();
         editStudent = editStudent();
         addClass = addClass();
+        modifyClass = modifyClass();
+        editClass = editClass();
 
+        master.add(modifyClass);
         master.add(mainMenu);
         master.add(addStudent);
         master.add(modifyStudent);
         master.add(editStudent);
         master.add(addClass);
+        master.add(editClass);
 
+        modifyClass.setVisible(false);
         addClass.setVisible(false);
         editStudent.setVisible(false);
         addStudent.setVisible(false);
         modifyStudent.setVisible(false);
+        editClass.setVisible(false);
 
         add(master);
 
@@ -54,16 +62,19 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JButton addStudentBtn = new JButton("Add New Student");
         JButton removeStudentBtn = new JButton("Modify A Student");
         JButton addClassBtn = new JButton("Add a New Class");
+        JButton modClassBtn = new JButton("Modify A Class");
         //JButton editStudentBtn = new JButton("Edit A Student");
 
         addClassBtn.addActionListener(this);
         removeStudentBtn.addActionListener(this);
         addStudentBtn.addActionListener(this);
+        modClassBtn.addActionListener(this);
         //editStudentBtn.addActionListener(this);
 
         superPanel.add(addStudentBtn);
         superPanel.add(removeStudentBtn);
         superPanel.add(addClassBtn);
+        superPanel.add(modClassBtn);
         //superPanel.add(editStudentBtn);
 
         mainPanel.add(superPanel, BorderLayout.CENTER);
@@ -339,8 +350,99 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         return infoScreen;
     }
-    //private JPanel modifyClass(){}
-   // private JPanel editClass(){}
+    private JPanel modifyClass(){
+        JPanel infoScreen = new JPanel(new BorderLayout());
+
+        JLabel title = new JLabel("Modifying A Class");
+        infoScreen.add(title, BorderLayout.NORTH);
+
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JPanel coursePanel = new JPanel(new FlowLayout());
+
+        JLabel courseIdLabel = new JLabel("Course ID: ");
+        JTextField courseIdText = new JTextField(10);
+
+        coursePanel.add(courseIdLabel);
+        coursePanel.add(courseIdText);
+
+        JPanel btnPanel = new JPanel(new FlowLayout());
+
+        JButton delClassBtn = new JButton("Remove Class");
+        JButton editClassBtn = new JButton("Edit Class");
+
+        delClassBtn.addActionListener(this);
+        editClassBtn.addActionListener(this);
+
+        btnPanel.add(delClassBtn);
+        btnPanel.add(editClassBtn);
+
+        panel.add(coursePanel);
+        panel.add(btnPanel);
+
+        infoScreen.add(panel, BorderLayout.CENTER);
+
+        return infoScreen;
+
+    }
+   private JPanel editClass(){
+       JPanel infoScreen = new JPanel();
+       infoScreen.setLayout(new BorderLayout());
+
+       JLabel title = new JLabel("Modifying Class");
+       infoScreen.add(title, BorderLayout.NORTH);
+
+       JButton backBtn = new JButton("Back");
+       backBtn.addActionListener(this);
+       infoScreen.add(backBtn, BorderLayout.SOUTH);
+
+       JPanel panel = new JPanel();
+       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+       JPanel classIdPanel = new JPanel(new FlowLayout());
+       JPanel subjectPanel = new JPanel(new FlowLayout());
+       JPanel infoPanel = new JPanel(new FlowLayout());
+
+       JLabel classIdLabel = new JLabel("Class ID: ");
+       JLabel subjectLabel = new JLabel("Subject: ");
+       JLabel classNumLabel = new JLabel("Class Number: ");
+       JLabel creditLabel = new JLabel("Credits: ");
+       //String FName = *some query to fetch first name from student ID*
+       // create text field with this
+
+       //String LName = *some query to fetch last name from student ID*
+       // create text field with this
+
+       //String DOB = * some query to fetch dob from student ID*
+       // create text field with this
+
+       //float GPA = * some query to fetch gpa from student ID*
+       // create text field with this
+
+       classIdPanel.add(classIdLabel);
+       // add textfield
+       subjectPanel.add(subjectLabel);
+       // add textfield
+
+       infoPanel.add(classNumLabel);
+       // add textfield
+
+       infoPanel.add(creditLabel);
+       // add textfield
+
+       panel.add(classIdPanel);
+       panel.add(subjectPanel);
+       panel.add(infoPanel);
+       //isUGrad = *some query to fetch*
+
+       infoScreen.add(panel);
+       return infoScreen;
+   }
 
 
 
@@ -350,6 +452,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
         else if (modifyStudent.isVisible()){return modifyStudent;}
         else if (editStudent.isVisible()){return editStudent;}
         else if (addClass.isVisible()){return addClass;}
+        else if (modifyClass.isVisible()){return modifyClass;}
+        else if (editClass.isVisible()){return editClass;}
         else{ return mainMenu;}
     }
     @Override
@@ -369,6 +473,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
             modifyStudent.setVisible(true);
             master.updateUI();
         }
+        else if (actionEvent.getActionCommand().equals("Modify A Class")){
+            mainMenu.setVisible(false);
+            modifyClass.setVisible(true);
+            master.updateUI();
+        }
         else if (actionEvent.getActionCommand().equals("Edit A Student")){
             mainMenu.setVisible(false);
             editStudent.setVisible(true);
@@ -379,6 +488,10 @@ public class FacultyInterface extends JFrame implements ActionListener {
             if (curPanel == editStudent){
                 curPanel.setVisible(false);
                 modifyStudent.setVisible(true);
+            }
+            else if (curPanel == editClass){
+                curPanel.setVisible(false);
+                modifyClass.setVisible(true);
             }
             else {
                 curPanel.setVisible(false);
@@ -395,9 +508,17 @@ public class FacultyInterface extends JFrame implements ActionListener {
         else if (actionEvent.getActionCommand().equals("Remove Student")){
             // call sql command to remove the student from the database
         }
+        else if (actionEvent.getActionCommand().equals("Remove Class")){
+            // call sql command to remove the student from the database
+        }
         else if (actionEvent.getActionCommand().equals("Edit Student")){
             modifyStudent.setVisible(false);
             editStudent.setVisible(true);
+            master.updateUI();
+        }
+        else if (actionEvent.getActionCommand().equals("Edit Class")){
+            modifyClass.setVisible(false);
+            editClass.setVisible(true);
             master.updateUI();
         }
     }
