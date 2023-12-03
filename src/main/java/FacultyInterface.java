@@ -5,16 +5,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FacultyInterface extends JFrame implements ActionListener {
-    JPanel master = new JPanel();
-    JPanel mainMenu = mainMenu();
-    JPanel addStudent = addStudent();
-    JPanel modifyStudent = modifyStudent();
-    JPanel editStudent = editStudent();
-    JPanel addClass = addClass();
+    JPanel master;
+    JPanel mainMenu;
+    JPanel addStudent;
+    JPanel modifyStudent;
+    JPanel editStudent;
+    JPanel addClass;
+
     public FacultyInterface(){
         setTitle("Faculty Login");
         setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        master = new JPanel();
+        mainMenu = mainMenu();
+        addStudent = addStudent();
+        modifyStudent = modifyStudent();
+        editStudent = editStudent();
+        addClass = addClass();
 
         master.add(mainMenu);
         master.add(addStudent);
