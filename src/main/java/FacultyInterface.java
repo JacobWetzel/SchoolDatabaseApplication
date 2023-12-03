@@ -112,6 +112,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JLabel studentIdLabel = new JLabel("Student ID: ");
         JTextField studentIdText = new JTextField("12345",15);
         JLabel studentPassLabel = new JLabel("Password: ");
+
+
         JTextField studentPassText = new JTextField("123456789",15);
         studentIdText.setBorder(new EmptyBorder(0,0,0,5));
 
