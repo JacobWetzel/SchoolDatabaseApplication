@@ -5,7 +5,25 @@ public class RetrieveFunctions {
     private static String url;
     public RetrieveFunctions(){url = "jdbc:sqlite:./src/main/jav/Databases/SchoolDB.SQLite";}
 
+    public static String getAdvisor(int StudentID){
+        try (Connection conn = DriverManager.getConnection(url)){
+            String sql  = "Select * FROM Faculty WHERE "; // this is the retrieve statement
+            try (PreparedStatement statement = conn.prepareStatement(sql)){ // we want the function to return value in faculty table
+                ResultSet rs = statement.executeQuery(sql);
+                String full = "";
+                while (rs.next()){
+                    String fname = rs.getString(2);
+                    String lname = rs.getString(3);
+                    full = "Advisor Name: " + fname + " " + lname;
 
+                }
+                return full;
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            return "Failed to retrieve data";
+        }
+    }
     public static String[] getClassList(){
         try (Connection conn = DriverManager.getConnection(url)){
 
