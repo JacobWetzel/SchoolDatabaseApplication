@@ -1,12 +1,161 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class StudentInterface extends JFrame {
-
+public class StudentInterface extends JFrame implements ActionListener {
+    JPanel master = new JPanel();
+    JPanel mainPanel = mainMenu();
+    JPanel addClass = addClass();
     public StudentInterface(){
-        setTitle("Student Login");
+        setTitle("Student View");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        master.add(addClass);
+        master.add(mainPanel);
+
+        addClass.setVisible(false);
+        mainPanel.setVisible(true);
+
+        add(master);
+        master.updateUI();
     }
 
 
+
+    private JPanel mainMenu(){
+        GridLayout layout = new GridLayout(3,1);
+        layout.setHgap(50);
+        layout.setVgap(20);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBorder(new EmptyBorder(15,20,15,20));
+        JPanel superPanel = new JPanel();
+        superPanel.setLayout(layout);
+
+        JButton addClass = new JButton("Add Class");
+        JButton searchClass = new JButton("Search for a Class");
+        JButton viewAdvisor = new JButton("View Advisor");
+
+        addClass.addActionListener(this);
+        searchClass.addActionListener(this);
+        viewAdvisor.addActionListener(this);
+
+        superPanel.add(addClass);
+        superPanel.add(searchClass);
+        superPanel.add(viewAdvisor);
+
+        mainPanel.add(superPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private JPanel addClass(){
+
+        // create needed Panel Containers
+        JPanel infoScreen = new JPanel();
+        infoScreen.setLayout(new BorderLayout());
+
+        JLabel title = new JLabel("Add a Class");           // create heading for current panel
+        infoScreen.add(title, BorderLayout.NORTH);              // add it to top of page
+
+        JButton backBtn = new JButton("Back");              // create a back button
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);            // add it to the bottom of the page
+
+
+        JPanel panel = new JPanel();                            // this will house everything else
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));    // we want it to be vertically aligned
+
+        JPanel majorPanel = new JPanel();           // contains dept selection info
+        majorPanel.setLayout(new FlowLayout());     // we want it to be inline horizontal
+
+        JPanel classNumPanel = new JPanel();        // contains class num info
+        classNumPanel.setLayout(new FlowLayout());  // we want it to be inline horizontal
+
+        // Create needed displaying objects
+        JLabel majorLabel = new JLabel("Department");       // subject field in the class table
+        JLabel classNumLabel = new JLabel("Course Number");  // classNum field in the class table
+
+        String majorsList[]={"CMPSC", "MATH", "ENGR", "HIST", "ART", "PHYS"};
+        JComboBox majorsCb = new JComboBox(majorsList);
+
+        JTextField classNumTxt = new JTextField();          // user enters the course number for CMPSC-465 they enter 465
+
+        // add objects to containers
+        majorPanel.add(majorLabel);
+        majorPanel.add(majorsCb);
+
+        classNumPanel.add(classNumLabel);
+        classNumPanel.add(classNumTxt);
+
+        panel.add(majorPanel);
+        panel.add(classNumPanel);
+
+        infoScreen.add(panel);
+
+        return infoScreen;
+
+    }
+    private static JPanel viewClass(){
+        JPanel infoScreen = new JPanel();
+
+        // create an array
+        // retrieve students classes from db and populate the array
+
+        // create a for loop iterating through the array
+        // create JLabel for each class
+
+        return infoScreen;
+    }
+
+    private static JPanel viewAdvisor(){
+        JPanel infoScreen = new JPanel();
+
+        // retrieve the advisor from table as a usable string
+
+        // make a jlabel with the advisors info
+
+        return infoScreen;
+    }
+    private static void addButtonWithPadding(JPanel panel, String btnText){
+        JButton button = new JButton(btnText);
+
+        button.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+        panel.add(button);
+    }
+
+    private JPanel getActivePanel(){
+        if (mainPanel.isVisible() == true){return mainPanel;}
+        else if (addClass.isVisible() == true){return addClass;}
+
+        else{ return mainPanel;}
+    }
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (actionEvent.getActionCommand().equals("Add Class")){
+                // this is where we go to new panel
+                mainPanel.setVisible(false);
+                addClass.setVisible(true);
+                master.updateUI();
+
+        }
+        else if (actionEvent.getActionCommand().equals("Search for a Class")){
+                // this is where we go to new panel
+        }
+        else if (actionEvent.getActionCommand().equals("View Advisor")){
+                // this is where we go to new panel
+        }
+        else if (actionEvent.getActionCommand().equals("Back")){
+            JPanel curPanel = getActivePanel();
+
+            curPanel.setVisible(false);
+            mainPanel.setVisible(true);
+            master.updateUI();
+        }
+    }
 }
