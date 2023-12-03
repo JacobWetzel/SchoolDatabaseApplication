@@ -1,4 +1,0 @@
-LoginWindow.java
- LoginWindow
-DatabaseLogin.java
- DatabaseLogin

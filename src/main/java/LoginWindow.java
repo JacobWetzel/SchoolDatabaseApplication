@@ -68,7 +68,7 @@ public class LoginWindow extends JFrame implements ActionListener{
                 studentInterface.setVisible(true);
                 dispose();
             }
-            if (db.facultyCredentialsValidation(username, password)) {
+            else if (db.facultyCredentialsValidation(username, password)) {
                 System.out.println("faculty LOGIN SUCCESSFUL");
                 FacultyInterface facultyInterface = new FacultyInterface();
                 facultyInterface.setVisible(true);
