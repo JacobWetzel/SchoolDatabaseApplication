@@ -5,18 +5,31 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StudentInterface extends JFrame implements ActionListener {
-    int studentId;
-    JPanel master = new JPanel();
-    JPanel mainPanel = mainMenu();
-    JPanel addClass = addClass();
-    JPanel viewAdvisor = viewAdvisor();
-    JPanel viewClass = viewClass();
-    public StudentInterface(String studentID){
-        studentId = Integer.parseInt(studentID);
+    String studentId;
+    JPanel master;// = new JPanel();
+    JPanel mainPanel;// = mainMenu();
+    JPanel addClass;// = addClass();
+    JPanel viewAdvisor;
+    JPanel viewClass;// = viewClass();
 
+    RetrieveFunctions retrieveFunctions;
+
+    QueryFunctions queryFunctions;
+
+    public StudentInterface(String studentID){
+        retrieveFunctions = new RetrieveFunctions();
+        queryFunctions = new QueryFunctions();
+        studentId = studentID;
         setTitle("Student View");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        master = new JPanel();
+        mainPanel = mainMenu();
+        addClass = addClass();
+        viewAdvisor = viewAdvisor();
+        viewClass = viewClass();
 
         master.add(addClass);
         master.add(mainPanel);
@@ -123,6 +136,7 @@ public class StudentInterface extends JFrame implements ActionListener {
 
     }
     private JPanel viewClass(){
+
         JPanel infoScreen = new JPanel();
         infoScreen.setLayout(new BorderLayout());
 
@@ -142,7 +156,7 @@ public class StudentInterface extends JFrame implements ActionListener {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // create an array
-        String[] classArray = RetrieveFunctions.getClassList(); // retrieve students classes from db and populate the array
+        String[] classArray = retrieveFunctions.getClassList(); // retrieve students classes from db and populate the array
 
         // create a for loop iterating through the array
         for (String s : classArray) {
@@ -168,7 +182,7 @@ public class StudentInterface extends JFrame implements ActionListener {
         infoScreen.add(backBtn, BorderLayout.SOUTH);
 
         // retrieve the advisor from table as a usable string
-        String advisorInfo = RetrieveFunctions.getAdvisor(studentId);
+        String advisorInfo = retrieveFunctions.getAdvisor(studentId);
         // make a jlabel with the advisors info
         JLabel advisorName = new JLabel(advisorInfo);
         infoScreen.add(advisorName,BorderLayout.CENTER);

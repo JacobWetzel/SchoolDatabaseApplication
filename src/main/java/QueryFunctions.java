@@ -10,7 +10,7 @@ public class QueryFunctions {
     }
 
     public static boolean studentCredentialsValidation(String username, String password){
-
+        System.out.println("In queryfn");
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 System.out.println("Connection made");
