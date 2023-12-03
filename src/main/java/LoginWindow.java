@@ -64,7 +64,7 @@ public class LoginWindow extends JFrame implements ActionListener{
             QueryFunctions db = new QueryFunctions();
             if (db.studentCredentialsValidation(username, password)) {
                 System.out.println("Student LOGIN SUCCESSFUL");
-                StudentInterface studentInterface = new StudentInterface();
+                StudentInterface studentInterface = new StudentInterface(username);
                 studentInterface.setVisible(true);
                 dispose();
             }
