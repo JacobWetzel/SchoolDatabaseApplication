@@ -5,9 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StudentInterface extends JFrame implements ActionListener {
+
     JPanel master = new JPanel();
     JPanel mainPanel = mainMenu();
     JPanel addClass = addClass();
+
+    JPanel viewClass = viewClass();
     public StudentInterface(){
         setTitle("Student View");
         setSize(400, 300);
@@ -15,9 +18,11 @@ public class StudentInterface extends JFrame implements ActionListener {
 
         master.add(addClass);
         master.add(mainPanel);
+        master.add(viewClass);
 
         addClass.setVisible(false);
         mainPanel.setVisible(true);
+        viewClass.setVisible(false);
 
         add(master);
         master.updateUI();
@@ -84,7 +89,7 @@ public class StudentInterface extends JFrame implements ActionListener {
         JComboBox majorsCb = new JComboBox(majorsList);
 
         JTextField classNumTxt = new JTextField();          // user enters the course number for CMPSC-465 they enter 465
-
+        classNumTxt.setColumns(5);
         // add objects to containers
         majorPanel.add(majorLabel);
         majorPanel.add(majorsCb);
@@ -100,15 +105,35 @@ public class StudentInterface extends JFrame implements ActionListener {
         return infoScreen;
 
     }
-    private static JPanel viewClass(){
+    private JPanel viewClass(){
         JPanel infoScreen = new JPanel();
+        infoScreen.setLayout(new BorderLayout());
+
+
+        // create the title of the panel
+
+        JLabel title = new JLabel("All Classes");
+        infoScreen.add(title, BorderLayout.NORTH);
+
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);
+
+
+        // JPanel to hold the information
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // create an array
-        // retrieve students classes from db and populate the array
+        String[] classArray = RetrieveFunctions.getClassList(); // retrieve students classes from db and populate the array
 
         // create a for loop iterating through the array
-        // create JLabel for each class
+        for (String s : classArray) {
+            JLabel classLbl = new JLabel(s);
+            panel.add(classLbl);
+        }
 
+        infoScreen.add(panel, BorderLayout.CENTER); // fill the screen with class data
         return infoScreen;
     }
 
@@ -130,9 +155,9 @@ public class StudentInterface extends JFrame implements ActionListener {
     }
 
     private JPanel getActivePanel(){
-        if (mainPanel.isVisible() == true){return mainPanel;}
-        else if (addClass.isVisible() == true){return addClass;}
-
+        if (mainPanel.isVisible()){return mainPanel;}
+        else if (addClass.isVisible()){return addClass;}
+        else if (viewClass.isVisible()){return viewClass;}
         else{ return mainPanel;}
     }
     @Override
@@ -146,6 +171,9 @@ public class StudentInterface extends JFrame implements ActionListener {
         }
         else if (actionEvent.getActionCommand().equals("Search for a Class")){
                 // this is where we go to new panel
+                mainPanel.setVisible(false);
+                viewClass.setVisible(true);
+                master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("View Advisor")){
                 // this is where we go to new panel
