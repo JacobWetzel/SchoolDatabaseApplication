@@ -38,11 +38,14 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JTextField gpaText;
     JPanel mo;
 
+    RetrieveFunctions retrieveFunctions;
+
     QueryFunctions queryFunctions;
     public FacultyInterface(){
+        retrieveFunctions = new RetrieveFunctions();
         isViewing = true;
         mo = new JPanel(new FlowLayout());
-        classIdList = RetrieveFunctions.getClassList();
+        classIdList = retrieveFunctions.getClassList();
         isAdded = new JLabel("Success");
         failAdded = new JLabel("Failed");
         isAdded.setVisible(false);
