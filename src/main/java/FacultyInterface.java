@@ -6,7 +6,10 @@ import java.awt.event.ActionListener;
 
 public class FacultyInterface extends JFrame implements ActionListener {
     String[] yearList= {"Freshman", "Sophomore", "Junior", "Senior"};
+    JPanel selectingClass;
+    String[] studentList;
     String selectedClassID;
+    boolean isSorted = false;
     String[] classIdList;// = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
     JLabel isAdded;
     JLabel failAdded;
@@ -37,15 +40,16 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JTextField dobText;
     JTextField gpaText;
     JPanel mo;
+    JPanel viewStudent;
 
     RetrieveFunctions retrieveFunctions;
 
     QueryFunctions queryFunctions;
     public FacultyInterface(){
         retrieveFunctions = new RetrieveFunctions();
-        isViewing = true;
+        isViewing = false;
         mo = new JPanel(new FlowLayout());
-        classIdList = retrieveFunctions.getClassList();
+        classIdList = retrieveFunctions.getClassIDList();
         isAdded = new JLabel("Success");
         failAdded = new JLabel("Failed");
         isAdded.setVisible(false);
@@ -63,8 +67,12 @@ public class FacultyInterface extends JFrame implements ActionListener {
         addClass = addClass();
         modifyClass = modifyClass();
         editClass = editClass();
-        viewClass = viewClass();
+        viewStudent = viewStudent();
+        //viewClass = viewClass();
+        selectingClass = selectingClass();
 
+        master.add(viewStudent);
+        master.add(selectingClass);
         master.add(modifyClass);
         master.add(mainMenu);
         master.add(addStudent);
@@ -85,6 +93,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
         viewClass.setVisible(false);
         isAdded.setVisible(false);
         failAdded.setVisible(false);
+        selectingClass.setVisible(false);
+        viewStudent.setVisible(false);
         mo.add(master);
         add(mo);
 
@@ -107,6 +117,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JButton addClassBtn = new JButton("Add a New Class");
         JButton modClassBtn = new JButton("Modify A Class");
         JButton viewClassBtn = new JButton("View A Class");
+        JButton viewStudents = new JButton("View Students");
         //JButton editStudentBtn = new JButton("Edit A Student");
 
         addClassBtn.addActionListener(this);
@@ -114,6 +125,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         addStudentBtn.addActionListener(this);
         modClassBtn.addActionListener(this);
         viewClassBtn.addActionListener(this);
+        viewStudents.addActionListener(this);
         //editStudentBtn.addActionListener(this);
 
         superPanel.add(addStudentBtn);
@@ -121,6 +133,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         superPanel.add(addClassBtn);
         superPanel.add(modClassBtn);
         superPanel.add(viewClassBtn);
+        superPanel.add(viewStudents);
         //superPanel.add(editStudentBtn);
 
         mainPanel.add(superPanel, BorderLayout.CENTER);
@@ -433,7 +446,29 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
     JTextField courseIdText;
 
-    private JPanel modifyClass(){
+    public JPanel viewStudent(){
+        JPanel infoScreen = new JPanel(new BorderLayout());
+        JLabel title = new JLabel("All Students");
+        infoScreen.add(title, BorderLayout.NORTH);
+
+        JPanel studentPanel = new JPanel();
+        studentPanel.setLayout(new BoxLayout(studentPanel,BoxLayout.Y_AXIS));
+        if (!isSorted) {
+            //TODO studentList = retrieveFunctions.AllStudents();
+        }
+        JButton sortBtn = new JButton("Sort by GPA");
+        sortBtn.addActionListener(this);
+        studentPanel.add(sortBtn);
+        /*
+        for (String s: studentList){
+            JLabel student = new JLabel(s);
+            studentPanel.add(student);
+        }*/
+        infoScreen.add(studentPanel);
+
+        return infoScreen;
+    }
+    public JPanel modifyClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
         JLabel title = new JLabel("Modifying A Class");
@@ -450,9 +485,14 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         JLabel courseIdLabel = new JLabel("Course ID: ");
 
+
+        classIdList = retrieveFunctions.getClassIDList();
+        classIdCb = new JComboBox(classIdList);
+
+
         courseIdText = new JTextField(10);
         coursePanel.add(courseIdLabel);
-        coursePanel.add(courseIdText);
+        coursePanel.add(classIdCb);
 
         JPanel btnPanel = new JPanel(new FlowLayout());
 
@@ -528,9 +568,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
    }
 
 
-
-
-    private JPanel viewClass(){
+    private JPanel selectingClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
         JPanel upper = new JPanel();
@@ -539,97 +577,106 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JButton viewingBtn = new JButton("View");
         viewingBtn.addActionListener(this);
 
-        // TODO colect list of classes to view
-        //classIdList
-
-        //String[] tempList = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
         classIdCb = new JComboBox(classIdList);
         //int idx = classIdCb.getSelectedIndex();
         //selectedClassID = tempList[idx];
+        JLabel title = new JLabel("Class Detail View");
+        title.setFont(new Font("Arial", Font.PLAIN, 20));
+        upper.add(title);
+        upper.add(classIdCb);
+        upper.add(viewingBtn);
+        infoScreen.add(upper, BorderLayout.NORTH);
+        //infoScreen.add(title, BorderLayout.NORTH);
 
-        if (isViewing) {
-            JLabel title = new JLabel("Class Detail View");
-            title.setFont(new Font("Arial", Font.PLAIN, 20));
-            upper.add(title);
-            upper.add(classIdCb);
-            upper.add(viewingBtn);
-            infoScreen.add(upper, BorderLayout.NORTH);
-            //infoScreen.add(title, BorderLayout.NORTH);
+        //infoScreen.add(classIdCb, BorderLayout.NORTH);
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);
 
-            //infoScreen.add(classIdCb, BorderLayout.NORTH);
-            JButton backBtn = new JButton("Back");
-            backBtn.addActionListener(this);
-            infoScreen.add(backBtn, BorderLayout.SOUTH);
+        JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
-            JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        return infoScreen;
+    }
 
-            JPanel BoxPanel = new JPanel();
-            BoxPanel.setLayout(new BoxLayout(BoxPanel, BoxLayout.Y_AXIS));
+    private JPanel viewClass(){
+        JPanel infoScreen = new JPanel(new BorderLayout());
 
-            JPanel BorderPanel = new JPanel(new BorderLayout());
-
-            JPanel studentPanel = new JPanel();
-            studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
-
-
-            //TODO
-            //TODO add
-            //TODO drop
-            //TODO down
-            //TODO menu
-            //TODO
-            //TODO add
-            //TODO drop
-            //TODO down
-            //TODO menu
+        JPanel upper = new JPanel();
+        upper.setLayout(new BoxLayout(upper, BoxLayout.Y_AXIS));
 
 
-            JPanel classPanel = new JPanel(new FlowLayout());
-            // TODO these will be replaced with query
-            classIDName = selectedClassID + ": ";
-            JLabel classHeading = new JLabel(classIDName);
-            classSubjectName = "Database Management Systems";
-            JLabel classSubject = new JLabel(classSubjectName);
-            classPanel.add(classHeading);
-            classPanel.add(classSubject);
 
 
-            JPanel profPanel = new JPanel(new FlowLayout());
-            JLabel profHeading = new JLabel("Professor: ");
-            pName = "Matthew Baron"; // TODO =*query based on classID*
-            JLabel profName = new JLabel(pName);
-            profPanel.add(profHeading);
-            profPanel.add(profName);
+        JLabel title = new JLabel("Class Detail View");
+        title.setFont(new Font("Arial", Font.PLAIN, 20));
+        upper.add(title);
+        infoScreen.add(upper, BorderLayout.NORTH);
+
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);
+
+        JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
 
-            JPanel genEdPanel = new JPanel(new FlowLayout());
-            JLabel genEdHeading = new JLabel("GenEd Info: ");
-            JLabel genEd = new JLabel("TECH"); //TODO query for gened info
-            genEdPanel.add(genEdHeading);
-            genEdPanel.add(genEd);
+        JPanel BoxPanel = new JPanel();
+        BoxPanel.setLayout(new BoxLayout(BoxPanel, BoxLayout.Y_AXIS));
 
-            BoxPanel.add(classPanel);
-            BoxPanel.add(profPanel);
-            BoxPanel.add(genEdPanel);
+        JPanel BorderPanel = new JPanel(new BorderLayout());
 
-            JLabel studentTitle = new JLabel("Students: ");
-            studentTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        JPanel studentPanel = new JPanel();
+        studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
+
+
+        JPanel classPanel = new JPanel(new FlowLayout());
+        System.out.println("Current Selection: ");
+        System.out.println(selectedClassID);
+        System.out.println("We are calling the selected class");
+        classIDName = selectedClassID;
+        JLabel classHeading = new JLabel(classIDName);
+        classSubjectName = "Database Management Systems";
+        JLabel classSubject = new JLabel(classSubjectName);
+        classPanel.add(classHeading);
+        classPanel.add(classSubject);
+
+
+        JPanel profPanel = new JPanel(new FlowLayout());
+        JLabel profHeading = new JLabel("Professor: ");
+        pName = "Matthew Baron"; // TODO =*query based on classID*
+        JLabel profName = new JLabel(pName);
+        profPanel.add(profHeading);
+        profPanel.add(profName);
+
+
+
+        JPanel genEdPanel = new JPanel(new FlowLayout());
+        JLabel genEdHeading = new JLabel("GenEd Info: ");
+        JLabel genEd = new JLabel("TECH"); //TODO query for gened info
+        genEdPanel.add(genEdHeading);
+        genEdPanel.add(genEd);
+
+        BoxPanel.add(classPanel);
+        BoxPanel.add(profPanel);
+        BoxPanel.add(genEdPanel);
+
+        JLabel studentTitle = new JLabel("Students: ");
+        studentTitle.setFont(new Font("Arial", Font.BOLD, 16));
             // TODO to be changed into a query based on students who are taking the classID
-            String[] studentNameList = {"John Smith", "Joe Black", "Leo Milligan", "Christian Schmidt"};
+        String[] studentNameList = {"John Smith", "Joe Black", "Leo Milligan", "Christian Schmidt"};
 
-            for (String s : studentNameList) {
-                JLabel student = new JLabel(s);
-                student.setBorder(new EmptyBorder(5, 5, 5, 5));
-                studentPanel.add(student);
-            }
-            BorderPanel.add(studentTitle, BorderLayout.NORTH);
-            BorderPanel.add(studentPanel, BorderLayout.CENTER);
-            BorderPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
-            BoxPanel.add(BorderPanel);
-            BoxPanel.setAlignmentX(0);
-            outerPan.add(BoxPanel);
-            infoScreen.add(outerPan, BorderLayout.CENTER);
+        for (String s : studentNameList) {
+            JLabel student = new JLabel(s);
+            student.setBorder(new EmptyBorder(5, 5, 5, 5));
+            studentPanel.add(student);
         }
+        BorderPanel.add(studentTitle, BorderLayout.NORTH);
+        BorderPanel.add(studentPanel, BorderLayout.CENTER);
+        BorderPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        BoxPanel.add(BorderPanel);
+        BoxPanel.setAlignmentX(0);
+        outerPan.add(BoxPanel);
+        infoScreen.add(outerPan, BorderLayout.CENTER);
+
         return infoScreen;
     }
 
@@ -688,6 +735,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
             }
             isAdded.setVisible(false);
             failAdded.setVisible(false);
+            isViewing = false;
+            isSorted = false;
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Add Student")){
@@ -724,6 +773,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         }
         else if (actionEvent.getActionCommand().equals("Remove Class")){
+            int idx = classIdCb.getSelectedIndex();
+            selectedClassID = classIdList[idx];
             // TODO call sql command to remove the student from the database
         }
         else if (actionEvent.getActionCommand().equals("Edit Student")){
@@ -732,20 +783,38 @@ public class FacultyInterface extends JFrame implements ActionListener {
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Edit Class")){
+            int idx = classIdCb.getSelectedIndex();
+            selectedClassID = classIdList[idx];
+
             modifyClass.setVisible(false);
             editClass.setVisible(true);
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("View A Class")){
             mainMenu.setVisible(false);
-            viewClass.setVisible(true);
+            selectingClass.setVisible(true);
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("View")){
+            isViewing = true;
             int idx = classIdCb.getSelectedIndex();
-            selectedClassID = classIdList[idx];
-            master.updateUI();
+            String temp = classIdList[idx];
+            selectedClassID = temp;
+            System.out.println(selectedClassID + "end of button action");
+            selectingClass.setVisible(false);
+            viewClass.setVisible(true);
+            //master.updateUI();
 
+        }
+        else if (actionEvent.getActionCommand().equals("View Students")){
+            mainMenu.setVisible(false);
+            viewStudent.setVisible(true);
+            master.updateUI();
+        }
+        else if (actionEvent.getActionCommand().equals("Sort by GPA")){
+            isSorted = true;
+            // TODO studentList = retrieveFunctions.AllStudentsSorted();
+            master.updateUI();
         }
     }
 }
