@@ -73,7 +73,7 @@ public class RetrieveFunctions {
 
     public List<String> AllStudents() {
         List<String> students = new ArrayList<>();
-        String sql = "SELECT * FROM Students";
+        String sql = "SELECT S.StudentID, S.FName, S.LName, S.DOB, U.GPA FROM Students S JOIN Undergraduates U ON S.StudentID = U.StudentID";
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
