@@ -68,6 +68,81 @@ public class QueryFunctions {
         return false;
     }
 
+    public Boolean addStudentToStudentAndUG(String studentId, String fName, String lName, String dob, String password, String year, String major, Double gpa, String advisorFName, String advisorLName) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DriverManager.getConnection(url);
+
+            //beginning transaction
+            conn.setAutoCommit(false);
+
+
+            String sqlGetAdvisorId = "SELECT A.AdvisorID FROM Faculty F INNER JOIN Advisors A ON F.FacultyID = A.AdvisorID WHERE F.FName = ? AND F.LName = ?";
+            pstmt = conn.prepareStatement(sqlGetAdvisorId);
+            pstmt.setString(1, advisorFName);
+            pstmt.setString(2, advisorLName);
+            rs = pstmt.executeQuery();
+
+            String advisorId = null;
+            if (rs.next()) {
+                advisorId = rs.getString("AdvisorID");
+            }
+
+            if (advisorId != null) {
+                // Insert into Students
+                String sqlInsertStudent = "INSERT INTO Students (StudentID, FName, LName, DOB, Password) VALUES (?, ?, ?, ?, ?)";
+                pstmt = conn.prepareStatement(sqlInsertStudent);
+                pstmt.setString(1, studentId);
+                pstmt.setString(2, fName);
+                pstmt.setString(3, lName);
+                pstmt.setString(4, dob);
+                pstmt.setString(5, password);
+                pstmt.executeUpdate();
+
+                // Insert into Undergraduates
+                String sqlInsertUndergraduate = "INSERT INTO Undergraduates (StudentID, Year, Major, GPA, Advisor) VALUES (?, ?, ?, ?, ?)";
+                pstmt = conn.prepareStatement(sqlInsertUndergraduate);
+                pstmt.setString(1, studentId);
+                pstmt.setString(2, year);
+                pstmt.setString(3, major);
+                pstmt.setDouble(4, gpa);
+                pstmt.setString(5, advisorId);
+                pstmt.executeUpdate();
+            }
+
+            //finish transaction
+            conn.commit();
+
+            return true;
+
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    return false;
+                }
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+                return false;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 
 /*
     public static void addStudentUG(int studentID, String fname, String lname, String bday, float gpa, int year, String major, String researchArea, String Type, int ProfessorID,  int isGrad){

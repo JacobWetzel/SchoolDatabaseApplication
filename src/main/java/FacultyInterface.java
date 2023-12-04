@@ -18,12 +18,21 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JPanel addClass;
     JPanel modifyClass;
     JPanel editClass;
+
     JPanel viewClass;
+    JTextField studentIdText;
+    JTextField studentPassText;
+    JTextField studentFNameText;
+    JTextField studentLNameText;
+    JTextField dobText;
+    JTextField gpaText;
+
+    QueryFunctions queryFunctions;
     public FacultyInterface(){
         setTitle("Faculty Login");
         setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        queryFunctions = new QueryFunctions();
         master = new JPanel();
         viewClass = viewClass();
         mainMenu = mainMenu();
@@ -122,25 +131,25 @@ public class FacultyInterface extends JFrame implements ActionListener {
         gpaPanel.setLayout(new FlowLayout());
 
         JLabel studentIdLabel = new JLabel("Student ID: ");
-        JTextField studentIdText = new JTextField("12345",15);
+        studentIdText = new JTextField("12345",15);
         JLabel studentPassLabel = new JLabel("Password: ");
 
 
-        JTextField studentPassText = new JTextField("123456789",15);
+        studentPassText = new JTextField("123456789",15);
         studentIdText.setBorder(new EmptyBorder(0,0,0,5));
 
         JLabel studentFNameLabel = new JLabel("First Name: ");
         JLabel studentLNameLabel = new JLabel("Last Name: ");
-        JTextField studentFNameText = new JTextField(15);
+        studentFNameText = new JTextField(15);
         studentFNameText.setBorder(new EmptyBorder(0,0,0,5));
 
-        JTextField studentLNameText = new JTextField(15);
+        studentLNameText = new JTextField(15);
 
         JLabel dobLabel = new JLabel("Date of Birth: ");
-        JTextField dobText = new JTextField("dd/mm/yyyy",10);
+        dobText = new JTextField("dd/mm/yyyy",10);
 
         JLabel gpaLabel = new JLabel("GPA: ");
-        JTextField gpaText = new JTextField(5);
+        gpaText = new JTextField(5);
 
         JButton submitBtn = new JButton("Add Student");
         submitBtn.addActionListener(this);
@@ -319,7 +328,6 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
     private JPanel addClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
-
         JLabel title = new JLabel("Adding Class");
         infoScreen.add(title, BorderLayout.NORTH);
 
@@ -586,7 +594,22 @@ public class FacultyInterface extends JFrame implements ActionListener {
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Add Student")){
-            //TODO  call sql command to add the student to the database
+            String studentId = studentIdText.getText();
+            String FName = studentFNameText.getText();
+            String LName = studentLNameText.getText();
+            String password = studentPassText.getText();
+            String dob = dobText.getText();
+            Double gpa = Double.parseDouble(gpaText.getText());
+
+            Boolean inserted = queryFunctions.addStudentToStudentAndUG(studentId, FName, LName, dob, password, "Freshman", "Math", gpa, "Albert", "Einstein");
+            if(inserted){
+                //TODO display that student was added
+            }
+            else{
+                //TODO display student wasn't added
+            }
+
+
         }
         else if (actionEvent.getActionCommand().equals("Add Class")){
             // TODO call sql command to add the student to the database
