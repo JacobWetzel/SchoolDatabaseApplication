@@ -5,6 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FacultyInterface extends JFrame implements ActionListener {
+    String[] yearList= {"Freshman", "Sophomore", "Junior", "Senior"};
+    JLabel isAdded;
+    JLabel failAdded;
+    JComboBox classIdCb;
+    JTextField majorTextNS;
+    JTextField advisorTextNS;
+    JComboBox yearCb;
     String classIDName;        // TODO this is the "CMPSC 431"
     String classSubjectName;        // TODO this is the "Database Management Systems"
     String pName;               // TODO professors name
@@ -26,14 +33,20 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JTextField studentLNameText;
     JTextField dobText;
     JTextField gpaText;
+    JPanel mo;
 
     QueryFunctions queryFunctions;
     public FacultyInterface(){
+        mo = new JPanel(new FlowLayout());
+        isAdded = new JLabel("Success");
+        failAdded = new JLabel("Failed");
+        isAdded.setVisible(false);
         setTitle("Faculty Login");
         setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         queryFunctions = new QueryFunctions();
         master = new JPanel();
+        master.setLayout(new BoxLayout(master, BoxLayout.Y_AXIS));
         viewClass = viewClass();
         mainMenu = mainMenu();
         addStudent = addStudent();
@@ -52,6 +65,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
         master.add(addClass);
         master.add(editClass);
         master.add(viewClass);
+        master.add(isAdded);
+        master.add(failAdded);
 
         modifyClass.setVisible(false);
         addClass.setVisible(false);
@@ -60,8 +75,10 @@ public class FacultyInterface extends JFrame implements ActionListener {
         modifyStudent.setVisible(false);
         editClass.setVisible(false);
         viewClass.setVisible(false);
-
-        add(master);
+        isAdded.setVisible(false);
+        failAdded.setVisible(false);
+        mo.add(master);
+        add(mo);
 
         master.updateUI();
     }
@@ -104,6 +121,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
     }
     public JPanel addStudent(){
+
+
         JPanel infoScreen = new JPanel();
         infoScreen.setLayout(new BorderLayout());
 
@@ -154,6 +173,26 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JButton submitBtn = new JButton("Add Student");
         submitBtn.addActionListener(this);
 
+        JPanel yearPanel = new JPanel(new FlowLayout());
+        JLabel yearLabel = new JLabel("Year: ");
+        yearCb = new JComboBox(yearList);
+
+        JPanel advisorPanel = new JPanel(new FlowLayout());
+        JLabel advisorLabel = new JLabel("Advisor");
+        advisorTextNS = new JTextField(15);
+
+        JPanel majorPanel = new JPanel(new FlowLayout());
+        JLabel majorLabel = new JLabel("Major: ");
+        majorTextNS = new JTextField(15);
+
+        yearPanel.add(yearLabel);
+        yearPanel.add(yearCb);
+
+        advisorPanel.add(advisorLabel);
+        advisorPanel.add(advisorTextNS);
+
+        majorPanel.add(advisorLabel);
+        majorPanel.add(advisorTextNS);
 
         studentID.add(studentIdLabel);
         studentID.add(studentIdText);
@@ -175,7 +214,12 @@ public class FacultyInterface extends JFrame implements ActionListener {
         panel.add(studentName);
         panel.add(dobPanel);
         panel.add(gpaPanel);
+        panel.add(yearPanel);
+        panel.add(majorPanel);
+        panel.add(advisorPanel);
         panel.add(submitBtn);
+        panel.add(isAdded);
+        panel.setBorder(new EmptyBorder(5,5,5,5));
 
         infoScreen.add(panel);
 
@@ -490,6 +534,30 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JPanel studentPanel = new JPanel();
         studentPanel.setLayout(new BoxLayout(studentPanel,BoxLayout.Y_AXIS));
 
+
+
+
+
+        //TODO
+        //TODO add
+        //TODO drop
+        //TODO down
+        //TODO menu
+        //TODO
+        //TODO add
+        //TODO drop
+        //TODO down
+        //TODO menu
+
+
+        
+
+
+
+
+
+
+
         JPanel classPanel = new JPanel(new FlowLayout());
         // TODO these will be replaced with query
         classIDName = "CMPSC-431" + ": ";
@@ -591,6 +659,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
                 curPanel.setVisible(false);
                 mainMenu.setVisible(true);
             }
+            isAdded.setVisible(false);
+            failAdded.setVisible(false);
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Add Student")){
@@ -603,12 +673,13 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
             Boolean inserted = queryFunctions.addStudentToStudentAndUG(studentId, FName, LName, dob, password, "Freshman", "Math", gpa, "Albert", "Einstein");
             if(inserted){
-                //TODO display that student was added
+                isAdded.setVisible(true);
             }
             else{
                 //TODO display student wasn't added
+                failAdded.setVisible(true);
             }
-
+            master.updateUI();
 
         }
         else if (actionEvent.getActionCommand().equals("Add Class")){
