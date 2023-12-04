@@ -71,6 +71,44 @@ public class RetrieveFunctions {
         return classList.toArray(new String[0]);
     }
 
+    public List<String> AllStudents() {
+        List<String> students = new ArrayList<>();
+        String sql = "SELECT * FROM Students";
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String stud = "Name: " + rs.getString("FName") + " " + rs.getString("LName") + ", DOB: " + rs.getString("DOB");
+                students.add(stud);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return students;
+    }
+
+    public List<String> AllStudentsSorted() {
+        List<String> studentsSorted = new ArrayList<>();
+        String sql = "SELECT S.StudentID, S.FName, S.LName, S.DOB, U.GPA FROM Students S JOIN Undergraduates U ON S.StudentID = U.StudentID ORDER BY U.GPA DESC";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String stud = "Name: " + rs.getString("FName") + " " + rs.getString("LName") + ", DOB: " + rs.getString("DOB") + ", GPA: " + rs.getDouble("GPA");
+                studentsSorted.add(stud);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return studentsSorted;
+    }
+
+
+
     public String[] getClassIDList(){
 
         List<String> classList = new ArrayList<>();
