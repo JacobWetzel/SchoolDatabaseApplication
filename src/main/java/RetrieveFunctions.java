@@ -71,6 +71,28 @@ public class RetrieveFunctions {
         return classList.toArray(new String[0]);
     }
 
+    public static String[] getClassIDList(){
+
+        List<String> classList = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(url)){
+
+            String sql = "SELECT * FROM Classes";
+            try (PreparedStatement statement = conn.prepareStatement(sql)){
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    classList.add(rs.getString(1));
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return new String[]{"Failed to retrieve Data"};
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return new String[]{"Failed to connect to Database"};
+        }
+        return classList.toArray(new String[0]);
+    }
 
     // RETRIEVE STUDENT INFORMATION
     public static void retrieveStudentInfo(){}
