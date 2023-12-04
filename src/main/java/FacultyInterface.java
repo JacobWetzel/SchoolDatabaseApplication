@@ -246,6 +246,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         return infoScreen;
     }
+
+    JTextField StudentIdModifyText;
     public JPanel modifyStudent(){
         JPanel infoScreen = new JPanel();
         infoScreen.setLayout(new BorderLayout());
@@ -265,7 +267,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JPanel student = new JPanel(new FlowLayout());
 
         JLabel StudentIdLabel = new JLabel("Student ID: ");
-        JTextField StudentIdText = new JTextField("12345", 10);
+        StudentIdModifyText = new JTextField("12345", 10);
 
         JButton removeBtn = new JButton("Remove Student");
         removeBtn.addActionListener(this);
@@ -274,7 +276,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         editBtn.addActionListener(this);
 
         student.add(StudentIdLabel);
-        student.add(StudentIdText);
+        student.add(StudentIdModifyText);
 
         options.add(removeBtn);
         options.add(editBtn);
@@ -483,9 +485,12 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         JLabel courseIdLabel = new JLabel("Course ID: ");
 
+
         classIdList = retrieveFunctions.getClassIDList();
         classIdCb = new JComboBox(classIdList);
 
+
+        courseIdText = new JTextField(10);
         coursePanel.add(courseIdLabel);
         coursePanel.add(classIdCb);
 
@@ -758,6 +763,14 @@ public class FacultyInterface extends JFrame implements ActionListener {
         }
         else if (actionEvent.getActionCommand().equals("Remove Student")){
             // TODO call sql command to remove the student from the database
+            Boolean studentDeleted = queryFunctions.deleteStudentUG(StudentIdModifyText.getText());
+            if(studentDeleted){
+                //TODO show that student was deleted
+            }
+            else{
+                //todo indicate student wasn't deleted
+            }
+
         }
         else if (actionEvent.getActionCommand().equals("Remove Class")){
             int idx = classIdCb.getSelectedIndex();
