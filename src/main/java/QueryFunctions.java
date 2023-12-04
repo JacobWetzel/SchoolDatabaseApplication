@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.sql.*;
+import java.util.*;
+import java.util.List;
 
 public class QueryFunctions {
 
@@ -139,6 +141,72 @@ public class QueryFunctions {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public static List<List<String>> viewClassMetadata(String classID){
+        List<List<String>> retval = new ArrayList<>();
+        String url = "jdbc:sqlite:your_database_path.db";
+        String sql = "SELECT \n" +
+                "    f.FName AS TeacherFName,\n" +
+                "    f.LName AS TeacherLName,\n" +
+                "    s.FName AS StudentFName,\n" +
+                "    s.LName AS StudentLName,\n" +
+                "\tc.ClassID AS ClassIdInfo,\n" +
+                "\tc.ClassName AS className,\n" +
+                "    g.GenEdID,\n" +
+                "    c.Credits\n" +
+                "FROM Classes c\n" +
+                "LEFT JOIN Teaches t ON c.ClassID = t.ClassID\n" +
+                "LEFT JOIN Professors p ON t.ProfessorID = p.ProfessorID\n" +
+                "LEFT JOIN Faculty f ON p.ProfessorID = f.FacultyID\n" +
+                "LEFT JOIN Taking tk ON c.ClassID = tk.ClassID\n" +
+                "LEFT JOIN Students s ON tk.StudentID = s.StudentID\n" +
+                "LEFT JOIN GenEdClasses gc ON c.ClassID = gc.ClassID\n" +
+                "LEFT JOIN GenEds g ON gc.GenEdID = g.GenEdID\n" +
+                "WHERE c.ClassID = ?;";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, classID);
+
+            ResultSet rs = pstmt.executeQuery();
+            List<String> profNames = new ArrayList<>();
+            List<String> ClassInfo = new ArrayList<>();
+            List<String> studentNames = new ArrayList<>();
+            List<String> GenEdDep = new ArrayList<>();
+            List<String> creditsWorth = new ArrayList<>();
+            retval.add(profNames);
+            retval.add(ClassInfo);
+            retval.add(studentNames);
+            retval.add(GenEdDep);
+            retval.add(creditsWorth);
+
+            if(rs.next()){
+                profNames.add(rs.getString("TeacherFName"));
+                profNames.add(rs.getString("TeacherLName"));
+                ClassInfo.add(classID);
+                ClassInfo.add(rs.getString("className"));
+                studentNames.add(rs.getString("StudentFName") + " " + rs.getString("StudentLName"));
+                GenEdDep.add(rs.getString("GenEdID"));
+                creditsWorth.add(Integer.toString(rs.getInt("Credits")));
+            }
+            else{
+                profNames.add("NA");
+                return retval;
+
+            }
+
+            while (rs.next()) {
+                studentNames.add(rs.getString("StudentFirstName") + " " + rs.getString("StudentLastName"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return retval;
+
     }
 
 

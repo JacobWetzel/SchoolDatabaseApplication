@@ -248,16 +248,16 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
 
         //String FName = *some query to fetch first name from student ID*
-        // create text field with this
+        //TODO create text field with this
 
         //String LName = *some query to fetch last name from student ID*
-        // create text field with this
+        //TODO create text field with this
 
         //String DOB = * some query to fetch dob from student ID*
-        // create text field with this
+        //TODO create text field with this
 
         //float GPA = * some query to fetch gpa from student ID*
-        // create text field with this
+        //TODO create text field with this
 
         namePanel.add(firstLabel);
         // add textfield
@@ -376,6 +376,9 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         return infoScreen;
     }
+
+    JTextField courseIdText;
+
     private JPanel modifyClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
@@ -392,7 +395,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JPanel coursePanel = new JPanel(new FlowLayout());
 
         JLabel courseIdLabel = new JLabel("Course ID: ");
-        JTextField courseIdText = new JTextField(10);
+        courseIdText = new JTextField(10);
 
         coursePanel.add(courseIdLabel);
         coursePanel.add(courseIdText);
@@ -469,6 +472,10 @@ public class FacultyInterface extends JFrame implements ActionListener {
        infoScreen.add(panel);
        return infoScreen;
    }
+
+
+
+
     private JPanel viewClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
