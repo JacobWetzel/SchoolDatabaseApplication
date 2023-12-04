@@ -6,8 +6,11 @@ import java.awt.event.ActionListener;
 
 public class FacultyInterface extends JFrame implements ActionListener {
     String[] yearList= {"Freshman", "Sophomore", "Junior", "Senior"};
+    String selectedClassID;
+    String[] classIdList;// = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
     JLabel isAdded;
     JLabel failAdded;
+    boolean isViewing;
     JComboBox classIdCb;
     JTextField majorTextNS;
     JTextField advisorTextNS;
@@ -37,7 +40,9 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
     QueryFunctions queryFunctions;
     public FacultyInterface(){
+        isViewing = true;
         mo = new JPanel(new FlowLayout());
+        classIdList = RetrieveFunctions.getClassList();
         isAdded = new JLabel("Success");
         failAdded = new JLabel("Failed");
         isAdded.setVisible(false);
@@ -516,93 +521,103 @@ public class FacultyInterface extends JFrame implements ActionListener {
     private JPanel viewClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
-        JLabel title = new JLabel("Class Detail View");
-        title.setFont(new Font("Arial", Font.PLAIN, 20));
-        infoScreen.add(title, BorderLayout.NORTH);
+        JPanel upper = new JPanel();
+        upper.setLayout(new BoxLayout(upper, BoxLayout.Y_AXIS));
 
-        JButton backBtn = new JButton("Back");
-        backBtn.addActionListener(this);
-        infoScreen.add(backBtn,BorderLayout.SOUTH);
+        JButton viewingBtn = new JButton("View");
+        viewingBtn.addActionListener(this);
 
-        JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        // TODO colect list of classes to view
+        //classIdList
 
-        JPanel BoxPanel = new JPanel();
-        BoxPanel.setLayout(new BoxLayout(BoxPanel, BoxLayout.Y_AXIS));
+        //String[] tempList = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
+        classIdCb = new JComboBox(classIdList);
+        //int idx = classIdCb.getSelectedIndex();
+        //selectedClassID = tempList[idx];
 
-        JPanel BorderPanel = new JPanel(new BorderLayout());
+        if (isViewing) {
+            JLabel title = new JLabel("Class Detail View");
+            title.setFont(new Font("Arial", Font.PLAIN, 20));
+            upper.add(title);
+            upper.add(classIdCb);
+            upper.add(viewingBtn);
+            infoScreen.add(upper, BorderLayout.NORTH);
+            //infoScreen.add(title, BorderLayout.NORTH);
 
-        JPanel studentPanel = new JPanel();
-        studentPanel.setLayout(new BoxLayout(studentPanel,BoxLayout.Y_AXIS));
+            //infoScreen.add(classIdCb, BorderLayout.NORTH);
+            JButton backBtn = new JButton("Back");
+            backBtn.addActionListener(this);
+            infoScreen.add(backBtn, BorderLayout.SOUTH);
 
+            JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
+            JPanel BoxPanel = new JPanel();
+            BoxPanel.setLayout(new BoxLayout(BoxPanel, BoxLayout.Y_AXIS));
 
+            JPanel BorderPanel = new JPanel(new BorderLayout());
 
-
-        //TODO
-        //TODO add
-        //TODO drop
-        //TODO down
-        //TODO menu
-        //TODO
-        //TODO add
-        //TODO drop
-        //TODO down
-        //TODO menu
-
-
-        
-
-
-
-
+            JPanel studentPanel = new JPanel();
+            studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
 
 
-
-        JPanel classPanel = new JPanel(new FlowLayout());
-        // TODO these will be replaced with query
-        classIDName = "CMPSC-431" + ": ";
-        JLabel classHeading= new JLabel(classIDName);
-        classSubjectName = "Database Management Systems";
-        JLabel classSubject = new JLabel(classSubjectName);
-        classPanel.add(classHeading);
-        classPanel.add(classSubject);
-
-
-        JPanel profPanel = new JPanel(new FlowLayout());
-        JLabel profHeading = new JLabel("Professor: ");
-        pName = "Matthew Baron"; // TODO =*query based on classID*
-        JLabel profName = new JLabel(pName);
-        profPanel.add(profHeading);
-        profPanel.add(profName);
+            //TODO
+            //TODO add
+            //TODO drop
+            //TODO down
+            //TODO menu
+            //TODO
+            //TODO add
+            //TODO drop
+            //TODO down
+            //TODO menu
 
 
-        JPanel genEdPanel = new JPanel(new FlowLayout());
-        JLabel genEdHeading = new JLabel("GenEd Info: ");
-        JLabel genEd = new JLabel("TECH"); //TODO query for gened info
-        genEdPanel.add(genEdHeading);
-        genEdPanel.add(genEd);
+            JPanel classPanel = new JPanel(new FlowLayout());
+            // TODO these will be replaced with query
+            classIDName = selectedClassID + ": ";
+            JLabel classHeading = new JLabel(classIDName);
+            classSubjectName = "Database Management Systems";
+            JLabel classSubject = new JLabel(classSubjectName);
+            classPanel.add(classHeading);
+            classPanel.add(classSubject);
 
-        BoxPanel.add(classPanel);
-        BoxPanel.add(profPanel);
-        BoxPanel.add(genEdPanel);
 
-        JLabel studentTitle = new JLabel("Students: ");
-        studentTitle.setFont(new Font("Arial", Font.BOLD, 16));
-        // TODO to be changed into a query based on students who are taking the classID
-        String[] studentNameList = {"John Smith", "Joe Black", "Leo Milligan", "Christian Schmidt"};
+            JPanel profPanel = new JPanel(new FlowLayout());
+            JLabel profHeading = new JLabel("Professor: ");
+            pName = "Matthew Baron"; // TODO =*query based on classID*
+            JLabel profName = new JLabel(pName);
+            profPanel.add(profHeading);
+            profPanel.add(profName);
 
-        for (String s : studentNameList){
-            JLabel student = new JLabel(s);
-            student.setBorder(new EmptyBorder(5,5,5,5));
-            studentPanel.add(student);
+
+            JPanel genEdPanel = new JPanel(new FlowLayout());
+            JLabel genEdHeading = new JLabel("GenEd Info: ");
+            JLabel genEd = new JLabel("TECH"); //TODO query for gened info
+            genEdPanel.add(genEdHeading);
+            genEdPanel.add(genEd);
+
+            BoxPanel.add(classPanel);
+            BoxPanel.add(profPanel);
+            BoxPanel.add(genEdPanel);
+
+            JLabel studentTitle = new JLabel("Students: ");
+            studentTitle.setFont(new Font("Arial", Font.BOLD, 16));
+            // TODO to be changed into a query based on students who are taking the classID
+            String[] studentNameList = {"John Smith", "Joe Black", "Leo Milligan", "Christian Schmidt"};
+
+            for (String s : studentNameList) {
+                JLabel student = new JLabel(s);
+                student.setBorder(new EmptyBorder(5, 5, 5, 5));
+                studentPanel.add(student);
+            }
+            BorderPanel.add(studentTitle, BorderLayout.NORTH);
+            BorderPanel.add(studentPanel, BorderLayout.CENTER);
+            BorderPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+            BoxPanel.add(BorderPanel);
+            BoxPanel.setAlignmentX(0);
+            outerPan.add(BoxPanel);
+            infoScreen.add(outerPan, BorderLayout.CENTER);
         }
-        BorderPanel.add(studentTitle, BorderLayout.NORTH);
-        BorderPanel.add(studentPanel, BorderLayout.CENTER);
-        BorderPanel.setBorder(new EmptyBorder(10,0,10,0));
-        BoxPanel.add(BorderPanel);
-        BoxPanel.setAlignmentX(0);
-        outerPan.add(BoxPanel);
-        infoScreen.add(outerPan, BorderLayout.CENTER);
         return infoScreen;
     }
 
@@ -705,6 +720,12 @@ public class FacultyInterface extends JFrame implements ActionListener {
             mainMenu.setVisible(false);
             viewClass.setVisible(true);
             master.updateUI();
+        }
+        else if (actionEvent.getActionCommand().equals("View")){
+            int idx = classIdCb.getSelectedIndex();
+            selectedClassID = classIdList[idx];
+            master.updateUI();
+
         }
     }
 }
