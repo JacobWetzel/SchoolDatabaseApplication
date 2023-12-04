@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 public class FacultyInterface extends JFrame implements ActionListener {
     String[] yearList= {"Freshman", "Sophomore", "Junior", "Senior"};
     JPanel selectingClass;
+    String[] studentList;
     String selectedClassID;
+    boolean isSorted = false;
     String[] classIdList;// = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
     JLabel isAdded;
     JLabel failAdded;
@@ -38,6 +40,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JTextField dobText;
     JTextField gpaText;
     JPanel mo;
+    JPanel viewStudent;
 
     RetrieveFunctions retrieveFunctions;
 
@@ -64,9 +67,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
         addClass = addClass();
         modifyClass = modifyClass();
         editClass = editClass();
-        viewClass = viewClass();
+        viewStudent = viewStudent();
+        //viewClass = viewClass();
         selectingClass = selectingClass();
 
+        master.add(viewStudent);
         master.add(selectingClass);
         master.add(modifyClass);
         master.add(mainMenu);
@@ -89,6 +94,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         isAdded.setVisible(false);
         failAdded.setVisible(false);
         selectingClass.setVisible(false);
+        viewStudent.setVisible(false);
         mo.add(master);
         add(mo);
 
@@ -111,6 +117,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JButton addClassBtn = new JButton("Add a New Class");
         JButton modClassBtn = new JButton("Modify A Class");
         JButton viewClassBtn = new JButton("View A Class");
+        JButton viewStudents = new JButton("View Students");
         //JButton editStudentBtn = new JButton("Edit A Student");
 
         addClassBtn.addActionListener(this);
@@ -118,6 +125,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         addStudentBtn.addActionListener(this);
         modClassBtn.addActionListener(this);
         viewClassBtn.addActionListener(this);
+        viewStudents.addActionListener(this);
         //editStudentBtn.addActionListener(this);
 
         superPanel.add(addStudentBtn);
@@ -125,6 +133,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         superPanel.add(addClassBtn);
         superPanel.add(modClassBtn);
         superPanel.add(viewClassBtn);
+        superPanel.add(viewStudents);
         //superPanel.add(editStudentBtn);
 
         mainPanel.add(superPanel, BorderLayout.CENTER);
@@ -435,6 +444,28 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
     JTextField courseIdText;
 
+    public JPanel viewStudent(){
+        JPanel infoScreen = new JPanel(new BorderLayout());
+        JLabel title = new JLabel("All Students");
+        infoScreen.add(title, BorderLayout.NORTH);
+
+        JPanel studentPanel = new JPanel();
+        studentPanel.setLayout(new BoxLayout(studentPanel,BoxLayout.Y_AXIS));
+        if (!isSorted) {
+            //TODO studentList = retrieveFunctions.AllStudents();
+        }
+        JButton sortBtn = new JButton("Sort by GPA");
+        sortBtn.addActionListener(this);
+        studentPanel.add(sortBtn);
+        /*
+        for (String s: studentList){
+            JLabel student = new JLabel(s);
+            studentPanel.add(student);
+        }*/
+        infoScreen.add(studentPanel);
+
+        return infoScreen;
+    }
     public JPanel modifyClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
@@ -700,6 +731,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
             isAdded.setVisible(false);
             failAdded.setVisible(false);
             isViewing = false;
+            isSorted = false;
             master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("Add Student")){
@@ -753,12 +785,23 @@ public class FacultyInterface extends JFrame implements ActionListener {
         else if (actionEvent.getActionCommand().equals("View")){
             isViewing = true;
             int idx = classIdCb.getSelectedIndex();
-            selectedClassID = classIdList[idx];
+            String temp = classIdList[idx];
+            selectedClassID = temp;
             System.out.println(selectedClassID + "end of button action");
             selectingClass.setVisible(false);
             viewClass.setVisible(true);
-            master.updateUI();
+            //master.updateUI();
 
+        }
+        else if (actionEvent.getActionCommand().equals("View Students")){
+            mainMenu.setVisible(false);
+            viewStudent.setVisible(true);
+            master.updateUI();
+        }
+        else if (actionEvent.getActionCommand().equals("Sort by GPA")){
+            isSorted = true;
+            // TODO studentList = retrieveFunctions.AllStudentsSorted();
+            master.updateUI();
         }
     }
 }
