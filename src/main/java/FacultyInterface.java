@@ -1,13 +1,15 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.util.*;
 import java.awt.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class FacultyInterface extends JFrame implements ActionListener {
     String[] yearList= {"Freshman", "Sophomore", "Junior", "Senior"};
     JPanel selectingClass;
-    String[] studentList;
+    List<String> studentList;
     String selectedClassID;
     boolean isSorted = false;
     String[] classIdList;// = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
@@ -454,7 +456,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JPanel studentPanel = new JPanel();
         studentPanel.setLayout(new BoxLayout(studentPanel,BoxLayout.Y_AXIS));
         if (!isSorted) {
-            //TODO studentList = retrieveFunctions.AllStudents();
+            studentList = retrieveFunctions.AllStudents();
         }
         JButton sortBtn = new JButton("Sort by GPA");
         sortBtn.addActionListener(this);
