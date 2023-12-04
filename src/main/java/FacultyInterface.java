@@ -393,6 +393,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
         return infoScreen;
     }
 
+    JTextField classIdText;
+    JTextField DeptIdText;
+    JTextField subjectText;
+    JTextField classNumText;
+    JTextField creditText;
 
 
     private JPanel addClass(){
@@ -411,16 +416,16 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JPanel infoPanel = new JPanel(new FlowLayout());    //class num, subject, credits
 
         JLabel classIDLabel = new JLabel("Class ID: ");
-        JLabel profIDLabel = new JLabel("Professor ID: ");
+        JLabel profIDLabel = new JLabel("Department: ");
         JLabel subjectLabel = new JLabel("Subject: ");
         JLabel classNumLabel = new JLabel("Class Number: ");
         JLabel creditLabel = new JLabel("Credits: ");
 
-        JTextField classIdText = new JTextField(10);
-        JTextField profIdText = new JTextField(10);
-        JTextField subjectText = new JTextField(15);
-        JTextField classNumText = new JTextField(5);
-        JTextField creditText = new JTextField(5);
+        classIdText = new JTextField(10);
+        DeptIdText = new JTextField(10);
+        subjectText = new JTextField(15);
+        classNumText = new JTextField(5);
+        creditText = new JTextField(5);
 
         JButton addClassBtn = new JButton("Add Class");
         addClassBtn.addActionListener(this);
@@ -428,7 +433,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         IDPanel.add(classIDLabel);
         IDPanel.add(classIdText);
         IDPanel.add(profIDLabel);
-        IDPanel.add(profIdText);
+        IDPanel.add(DeptIdText);
 
         infoPanel.add(subjectLabel);
         infoPanel.add(subjectText);
@@ -761,6 +766,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         }
         else if (actionEvent.getActionCommand().equals("Add Class")){
+
+
             // TODO call sql command to add the student to the database
         }
         else if (actionEvent.getActionCommand().equals("Remove Student")){
@@ -784,6 +791,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
             editStudent.setVisible(true);
             master.updateUI();
         }
+
+        else if(actionEvent.getActionCommand().equals("submitEdit")){
+
+        }
+
         else if (actionEvent.getActionCommand().equals("Edit Class")){
             int idx = classIdCb.getSelectedIndex();
             selectedClassID = classIdList[idx];

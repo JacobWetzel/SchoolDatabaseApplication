@@ -231,6 +231,23 @@ public class QueryFunctions {
     }
 
 
+    public void addClass(String classId, String className, String subject, int classNum, int credits, String department) {
+        String sql = "INSERT INTO Classes(ClassID, ClassName, Subject, ClassNum, Credits, Department) VALUES(?,?,?,?,?,?)";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, classId);
+            pstmt.setString(2, className);
+            pstmt.setString(3, subject);
+            pstmt.setInt(4, classNum);
+            pstmt.setInt(5, credits);
+            pstmt.setString(6, department);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 
