@@ -78,7 +78,7 @@ public class RetrieveFunctions {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                String stud = "Name: " + rs.getString("FName") + " " + rs.getString("LName") + ", DOB: " + rs.getString("DOB");
+                String stud = "Name: " + rs.getString("FName") + " " + rs.getString("LName") + ", DOB: " + rs.getString("DOB") + rs.getDouble("GPA");
                 students.add(stud);
             }
         } catch (SQLException e) {
