@@ -458,6 +458,10 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JLabel title = new JLabel("All Students");
         infoScreen.add(title, BorderLayout.NORTH);
 
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(this);
+        infoScreen.add(backBtn, BorderLayout.SOUTH);
+
         JPanel studentPanel = new JPanel();
         studentPanel.setLayout(new BoxLayout(studentPanel,BoxLayout.Y_AXIS));
         if (!isSorted) {
@@ -466,11 +470,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JButton sortBtn = new JButton("Sort by GPA");
         sortBtn.addActionListener(this);
         studentPanel.add(sortBtn);
-        /*
+
         for (String s: studentList){
             JLabel student = new JLabel(s);
             studentPanel.add(student);
-        }*/
+        }
         infoScreen.add(studentPanel);
 
         return infoScreen;
@@ -697,6 +701,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
         else if (modifyClass.isVisible()){return modifyClass;}
         else if (editClass.isVisible()){return editClass;}
         else if (viewClass.isVisible()){return viewClass;}
+        else if (selectingClass.isVisible()){return selectingClass;}
+        else if (viewStudent.isVisible()){return viewStudent;}
         else{ return mainMenu;}
     }
     @Override
@@ -827,8 +833,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
         }
         else if (actionEvent.getActionCommand().equals("Sort by GPA")){
             isSorted = true;
-            // TODO studentList = retrieveFunctions.AllStudentsSorted();
-            master.updateUI();
+            studentList = retrieveFunctions.AllStudentsSorted();
+            viewStudent.updateUI();
         }
     }
 }
