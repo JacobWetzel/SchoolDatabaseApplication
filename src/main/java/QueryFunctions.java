@@ -209,6 +209,30 @@ public class QueryFunctions {
 
     }
 
+    public static Boolean deleteStudentUG(String studentID){
+        String sql = "DELETE FROM Students WHERE StudentID = ?;";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON");
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, studentID);
+                Integer del = pstmt.executeUpdate();
+                if(del > 0){
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return false;
+    }
+
+
+
+
 
 
 

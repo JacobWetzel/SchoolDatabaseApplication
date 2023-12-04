@@ -12,7 +12,7 @@ public class RetrieveFunctions {
     }
 
     public static String getAdvisor(String StudentID) {
-        System.out.println("Getting here " + url);
+
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 String sql = "SELECT F.FName, F.LName FROM Faculty F " +
@@ -71,7 +71,7 @@ public class RetrieveFunctions {
         return classList.toArray(new String[0]);
     }
 
-    public static String[] getClassIDList(){
+    public String[] getClassIDList(){
 
         List<String> classList = new ArrayList<>();
 
