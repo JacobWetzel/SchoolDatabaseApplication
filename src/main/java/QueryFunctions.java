@@ -262,6 +262,55 @@ public class QueryFunctions {
     }
 
 
+    public boolean isAdvisor(String facultyId){
+        String sql = "SELECT * FROM Advisors a INNER JOIN Faculty f ON a.AdvisorID = f.FacultyID WHERE a.AdvisorID = '?'";
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON");
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, facultyId);
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isStudentsAdvisor(String facultyId, String studentId){
+        String sql = "SELECT * FROM Advisors a INNER JOIN Undergraduates u ON a.AdvisorID = u.Advisor WHERE a.AdvisorID = ? AND u.StudentID = ?";
+            try (Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON");
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, facultyId);
+                pstmt.setString(2, studentId);
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
+
+
+    }
+
+
 
 
 

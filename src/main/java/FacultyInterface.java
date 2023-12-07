@@ -34,7 +34,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JPanel modifyClass;
     JPanel editClass;
 
-
+    String facultyId;
     JTextField studentIdText;
     JTextField studentPassText;
     JTextField studentFNameText;
@@ -50,7 +50,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
     JPanel viewClass;
 
-    public FacultyInterface(){
+    public FacultyInterface(String facultyID){
+        facultyId = facultyID;
         retrieveFunctions = new RetrieveFunctions();
         isViewing = false;
         mo = new JPanel(new FlowLayout());
@@ -293,6 +294,22 @@ public class FacultyInterface extends JFrame implements ActionListener {
         return infoScreen;
     }
 
+
+
+    JTextField editFName;
+    String editFNameString;
+    JTextField editLName;
+    String editLNameString;
+    JTextField editSubject;
+    String editSubjectString;
+    JTextField editDOB;
+    String editDOBString;
+    JTextField editGPA;
+    String editGPAString;
+
+
+
+
     private JPanel editStudent(){
         boolean isUGrad = true;
 
@@ -317,6 +334,20 @@ public class FacultyInterface extends JFrame implements ActionListener {
         JLabel lastLabel = new JLabel("Last Name: ");
         JLabel dobLabel = new JLabel("Date of Birth: ");
         JLabel gpaLabel = new JLabel("GPA: ");
+        
+        editFNameString = "";
+
+        editLNameString = "";
+        editSubjectString = "";
+        editDOBString = "";
+        editGPAString = "";
+        editFName = new JTextField(editFNameString, 15);
+        editLName = new JTextField(editLNameString, 15);
+        editSubject = new JTextField(editSubjectString, 15);
+        editDOB = new JTextField(editDOBString, 15);
+        editGPA = new JTextField(editGPAString, 15);
+
+
 
 
         //String FName = *some query to fetch first name from student ID*
@@ -332,22 +363,27 @@ public class FacultyInterface extends JFrame implements ActionListener {
         //TODO create text field with this
 
         namePanel.add(firstLabel);
+        namePanel.add(editFName);
         // add textfield
         namePanel.add(lastLabel);
+        namePanel.add(editLName);
         // add textfield
 
         dobPanel.add(dobLabel);
+        dobPanel.add(editDOB);
         // add textfield
 
         gpaPanel.add(gpaLabel);
+        gpaPanel.add(editGPA);
         // add textfield
 
         panel.add(namePanel);
         panel.add(dobPanel);
         panel.add(gpaPanel);
+        
         //isUGrad = *some query to fetch*
 
-        if (isUGrad){
+        /*if (isUGrad){
             JPanel data = new JPanel(new FlowLayout());
             JLabel yearLabel = new JLabel("Year: ");
             JLabel majorLabel = new JLabel("Major: ");
@@ -390,7 +426,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
             panel.add(typePanel);
             panel.add(profIDPanel);
 
-        }
+        }*/
 
         infoScreen.add(panel, BorderLayout.CENTER);
         return infoScreen;
@@ -527,6 +563,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
         return infoScreen;
 
     }
+
+
+
+
+
    private JPanel editClass(){
        JPanel infoScreen = new JPanel();
        infoScreen.setLayout(new BorderLayout());
@@ -799,14 +840,24 @@ public class FacultyInterface extends JFrame implements ActionListener {
         }
         else if (actionEvent.getActionCommand().equals("Remove Student")){
             // TODO call sql command to remove the student from the database
-            Boolean studentDeleted = queryFunctions.deleteStudentUG(StudentIdModifyText.getText());
-            if(studentDeleted){
-                //TODO show that student was deleted
-            }
-            else{
-                //todo indicate student wasn't deleted
-            }
 
+
+            if(queryFunctions.isAdvisor(StudentIdModifyText.getText())){
+                if(queryFunctions.isStudentsAdvisor(facultyId, StudentIdModifyText.getText())){
+
+                    Boolean studentDeleted = queryFunctions.deleteStudentUG(StudentIdModifyText.getText());
+                    if(studentDeleted){
+                        //TODO show that student was deleted
+                    }
+                    else{
+                        //todo indicate student wasn't deleted
+                    }
+                    modifyStudent.setVisible(false);
+                    editStudent.setVisible(true);
+                    master.updateUI();
+                }
+
+        }
         }
         else if (actionEvent.getActionCommand().equals("Remove Class")){
             int idx = classIdCb.getSelectedIndex();
@@ -814,9 +865,20 @@ public class FacultyInterface extends JFrame implements ActionListener {
             // TODO call sql command to remove the student from the database
         }
         else if (actionEvent.getActionCommand().equals("Edit Student")){
-            modifyStudent.setVisible(false);
-            editStudent.setVisible(true);
-            master.updateUI();
+                System.out.println("here1");
+
+            //if(queryFunctions.isAdvisor(facultyId)){
+                    System.out.println("here2");
+
+               // if(queryFunctions.isStudentsAdvisor(facultyId, StudentIdModifyText.getText())){
+                    System.out.println("here3");
+
+                    modifyStudent.setVisible(false);
+                    editStudent.setVisible(true);
+                    master.updateUI();
+                //}
+//}
+            
         }
 
         else if(actionEvent.getActionCommand().equals("submitEdit")){
