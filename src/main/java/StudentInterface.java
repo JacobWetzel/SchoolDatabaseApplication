@@ -37,7 +37,7 @@ public class StudentInterface extends JFrame implements ActionListener {
         queryFunctions = new QueryFunctions();
         studentId = studentID;
         setTitle("Student View");
-        setSize(400, 300);
+        setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
@@ -111,7 +111,7 @@ public class StudentInterface extends JFrame implements ActionListener {
 
     private JPanel ViewClass(){
         infoScreen = new JPanel(new BorderLayout());
-
+        infoScreen.setSize(600,800);
         JPanel upper = new JPanel();
         upper.setLayout(new BoxLayout(upper, BoxLayout.Y_AXIS));
 
