@@ -34,7 +34,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JPanel modifyClass;
     JPanel editClass;
 
-    JPanel viewClass;
+
     JTextField studentIdText;
     JTextField studentPassText;
     JTextField studentFNameText;
@@ -47,6 +47,9 @@ public class FacultyInterface extends JFrame implements ActionListener {
     RetrieveFunctions retrieveFunctions;
 
     QueryFunctions queryFunctions;
+
+    JPanel viewClass;
+
     public FacultyInterface(){
         retrieveFunctions = new RetrieveFunctions();
         isViewing = false;
@@ -70,7 +73,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
         modifyClass = modifyClass();
         editClass = editClass();
         viewStudent = viewStudent();
-        //viewClass = viewClass();
+        viewClass = viewClass();
         selectingClass = selectingClass();
 
         master.add(viewStudent);
@@ -575,6 +578,8 @@ public class FacultyInterface extends JFrame implements ActionListener {
    }
 
 
+
+   //SELECT WHICH CLASS YOU WANT TO SEE METADATA FOR
     private JPanel selectingClass(){
         JPanel infoScreen = new JPanel(new BorderLayout());
 
@@ -583,7 +588,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         JButton viewingBtn = new JButton("View");
         viewingBtn.addActionListener(this);
-
+        classIdList = retrieveFunctions.getClassIDList();
         classIdCb = new JComboBox(classIdList);
         //int idx = classIdCb.getSelectedIndex();
         //selectedClassID = tempList[idx];
@@ -605,14 +610,25 @@ public class FacultyInterface extends JFrame implements ActionListener {
         return infoScreen;
     }
 
+
+
+
+
+
+
+    // VIEW ALL META DATA ABOUT A CLASS
+    ArrayList<ArrayList<String>> classMetaData = new ArrayList<>();
+
+
+    //String[] studentNameList;
+
+    JPanel infoScreen, studentPanel;
+    JLabel classHeading, classSubject, profName, gened;
     private JPanel viewClass(){
-        JPanel infoScreen = new JPanel(new BorderLayout());
+        infoScreen = new JPanel(new BorderLayout());
 
         JPanel upper = new JPanel();
         upper.setLayout(new BoxLayout(upper, BoxLayout.Y_AXIS));
-
-
-
 
         JLabel title = new JLabel("Class Detail View");
         title.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -625,42 +641,31 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
-
         JPanel BoxPanel = new JPanel();
         BoxPanel.setLayout(new BoxLayout(BoxPanel, BoxLayout.Y_AXIS));
 
         JPanel BorderPanel = new JPanel(new BorderLayout());
 
-        JPanel studentPanel = new JPanel();
+        studentPanel = new JPanel();
         studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
 
-
         JPanel classPanel = new JPanel(new FlowLayout());
-        System.out.println("Current Selection: ");
-        System.out.println(selectedClassID);
-        System.out.println("We are calling the selected class");
-        classIDName = selectedClassID;
-        JLabel classHeading = new JLabel(classIDName);
-        classSubjectName = "Database Management Systems";
-        JLabel classSubject = new JLabel(classSubjectName);
+         classHeading = new JLabel();
+         classSubject = new JLabel();
         classPanel.add(classHeading);
         classPanel.add(classSubject);
 
-
         JPanel profPanel = new JPanel(new FlowLayout());
         JLabel profHeading = new JLabel("Professor: ");
-        pName = "Matthew Baron"; // TODO =*query based on classID*
-        JLabel profName = new JLabel(pName);
+        profName = new JLabel();
         profPanel.add(profHeading);
         profPanel.add(profName);
 
-
-
         JPanel genEdPanel = new JPanel(new FlowLayout());
         JLabel genEdHeading = new JLabel("GenEd Info: ");
-        JLabel genEd = new JLabel("TECH"); //TODO query for gened info
+        gened = new JLabel();
         genEdPanel.add(genEdHeading);
-        genEdPanel.add(genEd);
+        genEdPanel.add(gened);
 
         BoxPanel.add(classPanel);
         BoxPanel.add(profPanel);
@@ -668,14 +673,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         JLabel studentTitle = new JLabel("Students: ");
         studentTitle.setFont(new Font("Arial", Font.BOLD, 16));
-            // TODO to be changed into a query based on students who are taking the classID
-        String[] studentNameList = {"John Smith", "Joe Black", "Leo Milligan", "Christian Schmidt"};
 
-        for (String s : studentNameList) {
-            JLabel student = new JLabel(s);
-            student.setBorder(new EmptyBorder(5, 5, 5, 5));
-            studentPanel.add(student);
-        }
         BorderPanel.add(studentTitle, BorderLayout.NORTH);
         BorderPanel.add(studentPanel, BorderLayout.CENTER);
         BorderPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
@@ -683,8 +681,27 @@ public class FacultyInterface extends JFrame implements ActionListener {
         BoxPanel.setAlignmentX(0);
         outerPan.add(BoxPanel);
         infoScreen.add(outerPan, BorderLayout.CENTER);
-
+        this.add(infoScreen);
         return infoScreen;
+    }
+
+
+    private void viewClassUpdate(){
+
+        classHeading.setText(classMetaData.get(1).get(0));
+        classSubject.setText(classMetaData.get(1).get(1));
+        profName.setText(classMetaData.get(0).get(0));
+        gened.setText(classMetaData.get(3).get(0));
+
+        studentPanel.removeAll();
+        for (String s : classMetaData.get(2)) {
+            JLabel student = new JLabel(s);
+            student.setBorder(new EmptyBorder(5, 5, 5, 5));
+            studentPanel.add(student);
+        }
+        studentPanel.revalidate();
+        studentPanel.repaint();
+        return;
     }
 
 
@@ -707,6 +724,10 @@ public class FacultyInterface extends JFrame implements ActionListener {
             master.updateUI();
         }
         if (actionEvent.getActionCommand().equals("Add a New Class")){
+
+            /* add new class into the repertoire  */
+
+
             mainMenu.setVisible(false);
             addClass.setVisible(true);
             master.updateUI();
@@ -812,13 +833,11 @@ public class FacultyInterface extends JFrame implements ActionListener {
         else if (actionEvent.getActionCommand().equals("View")){
             isViewing = true;
             int idx = classIdCb.getSelectedIndex();
-            String temp = classIdList[idx];
-            selectedClassID = temp;
-            System.out.println(selectedClassID + "end of button action");
+            selectedClassID = classIdList[idx];
+            viewClassUpdate();
             selectingClass.setVisible(false);
             viewClass.setVisible(true);
-            //master.updateUI();
-
+            master.updateUI();
         }
         else if (actionEvent.getActionCommand().equals("View Students")){
             mainMenu.setVisible(false);

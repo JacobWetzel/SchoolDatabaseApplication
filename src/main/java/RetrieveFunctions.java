@@ -46,17 +46,18 @@ public class RetrieveFunctions {
 
         try (Connection conn = DriverManager.getConnection(url)){
 
-            String sql = "SELECT * FROM Classes";
+            String sql = "SELECT DISTINCT * FROM Classes INNER JOIN GenEdClasses";
             try (PreparedStatement statement = conn.prepareStatement(sql)){
                 ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
 
                     String courseID = rs.getString(1);
-                    String subject = rs.getString(3);   // retrieves the subject
+                    String subject = rs.getString(2);   // retrieves the subject
                     Integer Num = rs.getInt(4);             // gets the class number
                     Integer Credits = rs.getInt(5);
+                    String gened = rs.getString(7);
 
-                    String classDetails = "CourseID: " + courseID + "\n Subject: " + subject + "\n Course Number: " + Num + "\n Credits: " + Integer.toString(Credits);
+                    String classDetails = "CourseID: " + courseID + "\n Subject: " + subject + "\n Course Number: " + Num + "\n Credits: " + Integer.toString(Credits) + "\n GenEd " + gened;
                     classList.add(classDetails);
                 }
             } catch (SQLException e) {

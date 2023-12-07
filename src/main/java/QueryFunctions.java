@@ -144,18 +144,16 @@ public class QueryFunctions {
     }
 
 
-    public static List<List<String>> viewClassMetadata(String classID){
-        List<List<String>> retval = new ArrayList<>();
-        String url = "jdbc:sqlite:your_database_path.db";
+    public static ArrayList<ArrayList<String>> viewClassMetadata(String classID){
+        ArrayList<ArrayList<String>> retval = new ArrayList<>();
         String sql = "SELECT \n" +
-                "    f.FName AS TeacherFName,\n" +
-                "    f.LName AS TeacherLName,\n" +
-                "    s.FName AS StudentFName,\n" +
-                "    s.LName AS StudentLName,\n" +
-                "\tc.ClassID AS ClassIdInfo,\n" +
-                "\tc.ClassName AS className,\n" +
-                "    g.GenEdID,\n" +
-                "    c.Credits\n" +
+                "f.FName AS TeacherFName,\n" +
+                "f.LName AS TeacherLName,\n" +
+                "s.FName AS StudentFName,\n" +
+                "s.LName AS StudentLName,\n" +
+                "c.Subject AS className, \n" +
+                "g.GenEdID,\n" +
+                "c.Credits\n" +
                 "FROM Classes c\n" +
                 "LEFT JOIN Teaches t ON c.ClassID = t.ClassID\n" +
                 "LEFT JOIN Professors p ON t.ProfessorID = p.ProfessorID\n" +
@@ -172,11 +170,11 @@ public class QueryFunctions {
             pstmt.setString(1, classID);
 
             ResultSet rs = pstmt.executeQuery();
-            List<String> profNames = new ArrayList<>();
-            List<String> ClassInfo = new ArrayList<>();
-            List<String> studentNames = new ArrayList<>();
-            List<String> GenEdDep = new ArrayList<>();
-            List<String> creditsWorth = new ArrayList<>();
+            ArrayList<String> profNames = new ArrayList<>();
+            ArrayList<String> ClassInfo = new ArrayList<>();
+            ArrayList<String> studentNames = new ArrayList<>();
+            ArrayList<String> GenEdDep = new ArrayList<>();
+            ArrayList<String> creditsWorth = new ArrayList<>();
             retval.add(profNames);
             retval.add(ClassInfo);
             retval.add(studentNames);
@@ -184,8 +182,7 @@ public class QueryFunctions {
             retval.add(creditsWorth);
 
             if(rs.next()){
-                profNames.add(rs.getString("TeacherFName"));
-                profNames.add(rs.getString("TeacherLName"));
+                profNames.add(rs.getString("TeacherFName") + " " + rs.getString("TeacherLName"));
                 ClassInfo.add(classID);
                 ClassInfo.add(rs.getString("className"));
                 studentNames.add(rs.getString("StudentFName") + " " + rs.getString("StudentLName"));
@@ -230,8 +227,23 @@ public class QueryFunctions {
         return false;
     }
 
+    public void atToCart(String classID, String studentID){
+        String sql = "INSERT INTO Carts (StudentID, ClassID) VALUES(?, ?)";
+        try (Connection connection = DriverManager.getConnection(url);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-    public void addClass(String classId, String className, String subject, int classNum, int credits, String department) {
+            statement.setString(1, studentID);
+            statement.setString(2, classID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    public void addClass(String classId, String className, String subject, Integer classNum, Integer credits, String department) {
         String sql = "INSERT INTO Classes(ClassID, ClassName, Subject, ClassNum, Credits, Department) VALUES(?,?,?,?,?,?)";
 
         try (Connection conn = DriverManager.getConnection(url);
