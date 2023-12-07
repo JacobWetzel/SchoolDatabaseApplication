@@ -9,14 +9,24 @@ import java.util.List;
 public class FacultyInterface extends JFrame implements ActionListener {
     String[] yearList= {"Freshman", "Sophomore", "Junior", "Senior"};
     JPanel selectingClass;
+    int classIdx;
     List<String> studentList;
+    JTextField dobEdit;
+    String dobS;
+    JTextField gpaEdit;
+    String gpaS;
     String selectedClassID;
     boolean isSorted = false;
     String[] classIdList;// = {"CMPSC 465","CMPSC 473", "ENG 202", "HIST 20"};
     JLabel isAdded;
+    JTextField classIdEdit;
     JLabel failAdded;
     boolean isViewing;
     JComboBox classIdCb;
+    String temp;
+    String temp2;
+    String temp3;
+    String temp4;
     JTextField majorTextNS;
     JTextField advisorTextNS;
     JComboBox yearCb;
@@ -32,9 +42,20 @@ public class FacultyInterface extends JFrame implements ActionListener {
     JPanel editStudent;
     JPanel addClass;
     JPanel modifyClass;
+    JTextField FNameEdit;
+    JTextField LNameEdit;
     JPanel editClass;
 
+    JTextField subjectEdit;
+    JTextField classNumEdit;
+    JTextField creditEdit;
+    String fnameS;
+    String lnameS;
+
+
+
     String facultyId;
+
     JTextField studentIdText;
     JTextField studentPassText;
     JTextField studentFNameText;
@@ -352,17 +373,24 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         //String FName = *some query to fetch first name from student ID*
         //TODO create text field with this
+        fnameS = "John";   // replace with query
+        FNameEdit = new JTextField(fnameS,12);
 
         //String LName = *some query to fetch last name from student ID*
         //TODO create text field with this
-
+        lnameS = "Smith"; // replace with query
+        LNameEdit = new JTextField(lnameS,15);
         //String DOB = * some query to fetch dob from student ID*
         //TODO create text field with this
-
+        dobS = "03/12/2000";
+        dobEdit = new JTextField(dobS, 5);
         //float GPA = * some query to fetch gpa from student ID*
+        gpaS = "3.1";
+        gpaEdit = new JTextField(gpaS, 5);
         //TODO create text field with this
 
         namePanel.add(firstLabel);
+
         namePanel.add(editFName);
         // add textfield
         namePanel.add(lastLabel);
@@ -375,6 +403,7 @@ public class FacultyInterface extends JFrame implements ActionListener {
 
         gpaPanel.add(gpaLabel);
         gpaPanel.add(editGPA);
+
         // add textfield
 
         panel.add(namePanel);
@@ -590,33 +619,41 @@ public class FacultyInterface extends JFrame implements ActionListener {
        JLabel subjectLabel = new JLabel("Subject: ");
        JLabel classNumLabel = new JLabel("Class Number: ");
        JLabel creditLabel = new JLabel("Credits: ");
-       //TODO String FName = *some query to fetch first name from student ID*
-       // create text field with this
+       //TODO get selected class ID
+       String temp = classIdList[classIdx];
+        classIdEdit = new JTextField(temp, 15);
 
-       //TODO String LName = *some query to fetch last name from student ID*
-       // create text field with this
+       // TODO fetch class subject
+       JTextField subjectEdit = new JTextField(temp2,30);
 
-       //TODO String DOB = * some query to fetch dob from student ID*
-       // create text field with this
+       //TODO fetch class number
+       String temp3 = "1432";
+        classNumEdit = new JTextField(temp3,7);
 
-       //TODO float GPA = * some query to fetch gpa from student ID*
-       // create text field with this
+       //TODO fetch class credit req.
+       String temp4 = "3.0";
+       creditEdit = new JTextField(temp4,5);
 
        classIdPanel.add(classIdLabel);
        // add textfield
+       classIdPanel.add(classIdEdit);
+
        subjectPanel.add(subjectLabel);
-       // add textfield
+       subjectPanel.add(subjectEdit);
+
 
        infoPanel.add(classNumLabel);
-       // add textfield
+       infoPanel.add(classNumEdit);
+
 
        infoPanel.add(creditLabel);
-       // add textfield
+       infoPanel.add(creditEdit);
+
 
        panel.add(classIdPanel);
        panel.add(subjectPanel);
        panel.add(infoPanel);
-       //TODO isUGrad = *some query to fetch*
+
 
        infoScreen.add(panel);
        return infoScreen;
@@ -651,7 +688,6 @@ public class FacultyInterface extends JFrame implements ActionListener {
         infoScreen.add(backBtn, BorderLayout.SOUTH);
 
         JPanel outerPan = new JPanel(new FlowLayout(FlowLayout.LEADING));
-
         return infoScreen;
     }
 
@@ -881,13 +917,13 @@ public class FacultyInterface extends JFrame implements ActionListener {
             
         }
 
-        else if(actionEvent.getActionCommand().equals("submitEdit")){
-
+        else if(actionEvent.getActionCommand().equals("Submit Edit")){
+            // TODO push update to database
         }
 
         else if (actionEvent.getActionCommand().equals("Edit Class")){
-            int idx = classIdCb.getSelectedIndex();
-            selectedClassID = classIdList[idx];
+            classIdx = classIdCb.getSelectedIndex();
+            selectedClassID = classIdList[classIdx];
 
             modifyClass.setVisible(false);
             editClass.setVisible(true);
