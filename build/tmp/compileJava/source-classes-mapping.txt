@@ -1,12 +1,12 @@
 DatabaseLogin.java
  DatabaseLogin
-StudentInterface.java
- StudentInterface
-QueryFunctions.java
- QueryFunctions
-RetrieveFunctions.java
- RetrieveFunctions
-FacultyInterface.java
- FacultyInterface
 LoginWindow.java
  LoginWindow
+QueryFunctions.java
+ QueryFunctions
+FacultyInterface.java
+ FacultyInterface
+StudentInterface.java
+ StudentInterface
+RetrieveFunctions.java
+ RetrieveFunctions
